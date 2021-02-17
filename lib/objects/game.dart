@@ -1,10 +1,12 @@
+import 'package:flutter/material.dart';
+
 import 'player.dart';
 import 'score_entries/score_entry.dart';
 
 import '../utils/map_utils.dart' as map_utils;
 
 
-class Game {
+class Game extends ChangeNotifier {
 
   // ------------------------------------------------------------
   // attributes
@@ -32,12 +34,12 @@ class Game {
 
   void addScoreEntry(ScoreEntry scoreEntry) {
     scoreEntries.add(scoreEntry);
-    // TODO notifyListeners();
+    notifyListeners();
   }
 
   void removeScoreEntry(ScoreEntry scoreEntry) {
     scoreEntries.remove(scoreEntry);
-    // TODO notifyListeners();
+    notifyListeners();
   }
 
 
