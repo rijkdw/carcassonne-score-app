@@ -32,8 +32,30 @@ String sentencify<T>(List<T> list) {
   return returnString;
 }
 
+int count<T>(List<T> list, T target) {
+  var counter = 0;
+  for (var item in list) {
+    if (item == target) {
+      counter++;
+    }
+  }
+  return counter;
+}
+
+List<T> intersperse<T>(List<T> list, T Function() callback) {
+  if (list.length < 2) return list;
+  var returnList = <T>[];
+  for (var i = 0; i < list.length-1; i++) {
+    returnList.add(list[i]);
+    returnList.add(callback());
+  }
+  returnList.add(list.last);
+  return returnList;
+}
+
 String join(List<dynamic> list, String delim) {
-  if (list.length == 1) return list[0];
+  if (list.isEmpty) return '';
+  if (list.length == 1) return list.first;
   var output = '';
   for (var i = 0; i < list.length-1; i++) {
     output += list[i].toString();

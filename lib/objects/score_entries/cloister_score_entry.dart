@@ -36,11 +36,15 @@ class CloisterScoreEntry extends CastleableStructureScoreEntry {
     
     var structureNameAndScore = 'A cloister worth $structureScore points';
     var ownedBy = '${owners.first}';
-    var castles = '${map_utils.countMapTotal(castleOwners)} castles ($castleOwnersToString)';
-
+    String castles;
+    if (castleOwners.isNotEmpty) {
+      castles = '${map_utils.countMapTotal(castleOwners)} castles ($castleOwnersToString)';
+    } else {
+      castles = 'no castles';
+    }
     var returnString = '$structureNameAndScore ($scoreExplain) owned by $ownedBy with $castles. ';
     returnString += 'Final scores: ${map_utils.mapToString(scoreMap)}.';
-    
+
     return returnString;
   }
 
