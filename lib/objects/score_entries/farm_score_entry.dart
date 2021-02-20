@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'structure_score_entry.dart';
 
 import '../../utils/list_utils.dart' as list_utils;
@@ -26,6 +28,29 @@ class FarmScoreEntry extends StructureScoreEntry {
   }) : super(
     followersCount: followersCount
   );
+
+  // -------------------------------------------------------------------------------------------------
+  // JSON
+  // -------------------------------------------------------------------------------------------------
+
+  factory FarmScoreEntry.fromJSON(Map<String, dynamic> jsonMap) {
+    return FarmScoreEntry(
+      followersCount: jsonMap['followers_count'],
+      hasBarn: jsonMap['has_barn'],
+      numCastles: jsonMap['num_castles'],
+      numCities: jsonMap['num_cities']
+    );
+  }
+
+  Map<String, dynamic> toJSON() {
+    return {
+      'type': 'farm',
+      'followers_count': followersCount,
+      'has_barn': hasBarn,
+      'num_castles': numCastles,
+      'num_cities': numCities
+    };
+  }
 
   
   // ------------------------------------------------------------

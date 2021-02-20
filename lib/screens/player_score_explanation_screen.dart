@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/list_utils.dart' as list_utils;
+import '../utils/colour_utils.dart' as colour_utils;
+
 
 
 class PlayerScoreExplanationScreen extends StatelessWidget {
@@ -14,6 +16,7 @@ class PlayerScoreExplanationScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("${player.name} in ${game.name}"),
+        backgroundColor: colour_utils.fromText(player.colour),
       ),
       body: ListView(
         children: list_utils.intersperse(game.getScoreEntriesBenefitting(player.name).map((scoreEntry) {

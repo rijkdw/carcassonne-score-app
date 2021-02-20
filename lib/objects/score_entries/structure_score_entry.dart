@@ -24,7 +24,7 @@ abstract class StructureScoreEntry extends ScoreEntry {
       this.followersCount = map_utils.listToCountMap(followersCount);
     }
     else {
-      this.followersCount = followersCount;
+      this.followersCount = Map<String, int>.from(followersCount ?? {});
     }
   }
 

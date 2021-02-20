@@ -15,6 +15,29 @@ class FlatScoreEntry extends ScoreEntry {
   // ------------------------------------------------------------
   // constructors & factories
   // ------------------------------------------------------------
+
+  FlatScoreEntry({this.score, this.playerNames}) {
+    this.playerNames ??= <String>[];
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // JSON
+  // -------------------------------------------------------------------------------------------------
+
+  factory FlatScoreEntry.fromJSON(Map<String, dynamic> jsonMap) {
+    return FlatScoreEntry(
+      score: jsonMap['score'],
+      playerNames: jsonMap['player_names']
+    );
+  }
+
+  Map<String, dynamic> toJSON() {
+    return {
+      'type': 'flat',
+      'score': score,
+      'player_names': playerNames
+    };
+  }
   
   // ------------------------------------------------------------
   // getters

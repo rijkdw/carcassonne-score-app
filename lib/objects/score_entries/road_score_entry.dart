@@ -29,6 +29,29 @@ class RoadScoreEntry extends CastleableStructureScoreEntry {
     followersCount: followersCount
   );
 
+  // -------------------------------------------------------------------------------------------------
+  // JSON
+  // -------------------------------------------------------------------------------------------------
+
+  factory RoadScoreEntry.fromJSON(Map<String, dynamic> jsonMap) {
+    return RoadScoreEntry(
+      numSegments: jsonMap['num_segments'],
+      followersCount: jsonMap['followers_count'],
+      castleOwners: jsonMap['castle_owners'],
+      finished: jsonMap['finished'],
+      hasInnOnLake: jsonMap['has_inn_on_lake'],
+    );
+  }
+
+  Map<String, dynamic> toJSON() {
+    return {
+      'type': 'road',
+      'followers_count': followersCount,
+      'castle_owners': castleOwners,
+      'finished': finished,
+      'has_inn_on_lake': hasInnOnLake,
+    };
+  }
   
   // ------------------------------------------------------------
   // getters

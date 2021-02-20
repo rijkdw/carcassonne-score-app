@@ -22,9 +22,8 @@ abstract class CastleableStructureScoreEntry extends StructureScoreEntry {
     if (castleOwners is List<String>) {
       this.castleOwners = map_utils.listToCountMap(castleOwners);
     } else {
-      this.castleOwners = castleOwners;
+      this.castleOwners = Map<String, int>.from(castleOwners ?? {});
     }
-    this.castleOwners ??= <String, int>{};
   }
 
 

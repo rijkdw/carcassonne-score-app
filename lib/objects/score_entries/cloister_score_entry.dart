@@ -25,6 +25,27 @@ class CloisterScoreEntry extends CastleableStructureScoreEntry {
     followersCount: followersCount
   );
 
+  // -------------------------------------------------------------------------------------------------
+  // JSON
+  // -------------------------------------------------------------------------------------------------
+
+  factory CloisterScoreEntry.fromJSON(Map<String, dynamic> jsonMap) {
+    return CloisterScoreEntry(
+      followersCount: jsonMap['followers_count'],
+      numTiles: jsonMap['num_tiles'],
+      castleOwners: jsonMap['castle_owners']
+    );
+  }
+
+  Map<String, dynamic> toJSON() {
+    return {
+      'type': 'cloister',
+      'num_tiles': numTiles,
+      'castle_owners': castleOwners,
+      'followers_count': followersCount,
+    };
+  }
+
   
   // ------------------------------------------------------------
   // getters

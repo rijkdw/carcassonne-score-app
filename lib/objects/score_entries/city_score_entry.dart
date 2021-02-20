@@ -32,6 +32,33 @@ class CityScoreEntry extends CastleableStructureScoreEntry {
     followersCount: followersCount
   );
 
+  // -------------------------------------------------------------------------------------------------
+  // JSON
+  // -------------------------------------------------------------------------------------------------
+
+  factory CityScoreEntry.fromJSON(Map<String, dynamic> jsonMap) {
+    return CityScoreEntry(
+      numSegments: jsonMap['num_segments'],
+      numShields: jsonMap['num_shields'],
+      finished: jsonMap['finished'],
+      hasCathedral: jsonMap['has_cathedral'],
+      castleOwners: jsonMap['castle_owners'],
+      followersCount: jsonMap['followers_count']
+    );
+  }
+
+  Map<String, dynamic> toJSON() {
+    return {
+      'type': 'city',
+      'num_segments': numSegments,
+      'num_shields': numShields,
+      'finished': finished,
+      'has_cathedral': hasCathedral,
+      'castle_owners': castleOwners,
+      'followers_count': followersCount
+    };
+  }
+
   
   // ------------------------------------------------------------
   // getters
