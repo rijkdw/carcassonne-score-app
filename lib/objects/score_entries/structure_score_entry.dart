@@ -33,7 +33,7 @@ abstract class StructureScoreEntry extends ScoreEntry {
   // getters
   // ------------------------------------------------------------
 
-  int get structureScore;
+  int get structureScore => 0;
 
   List<String> get owners => map_utils.keysOfMaxValues(followersCount);
   

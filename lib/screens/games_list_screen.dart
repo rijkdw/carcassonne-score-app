@@ -1,4 +1,8 @@
 import 'package:carcassonne_score_app/managers/games_manager.dart';
+import 'package:carcassonne_score_app/objects/game.dart';
+import 'package:carcassonne_score_app/objects/score_entries/city_score_entry.dart';
+import 'package:carcassonne_score_app/objects/score_entries/cloister_score_entry.dart';
+import 'package:carcassonne_score_app/objects/score_entries/road_score_entry.dart';
 import 'package:carcassonne_score_app/screens/new_game_screen.dart';
 import 'package:carcassonne_score_app/widgets/list_views/games_list_view.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +17,19 @@ class GamesListScreen extends StatelessWidget {
         title: Text('Games'),
         actions: [
           IconButton(
-            icon: Icon(Icons.sd_storage),
+            icon: Icon(Icons.bug_report),
             onPressed: () {
-              gamesManager.storeInLocal();
-              gamesManager.loadFromLocal();
+              var game = Game(
+                playerNames: ['Rijk', 'Liza'],
+                playerColours: ['blue', 'red'],
+                name: 'Dummy Game',
+                scoreEntries: [
+                  CityScoreEntry(followersCount: ['Rijk'], numSegments: 2),
+                  RoadScoreEntry(followersCount: ['Liza'], numSegments: 2, castleOwners: ['Rijk']),
+                  CloisterScoreEntry(numTiles: 8, followersCount: ['Liza'])
+                ]
+              );
+              gamesManager.addNewGame(game);
             },
           ),
         ],

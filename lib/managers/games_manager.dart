@@ -20,19 +20,8 @@ class GamesManager extends ChangeNotifier {
   // -------------------------------------------------------------------------------------------------
 
   GamesManager({this.games}) {
-    var dummyScoreEntries = <ScoreEntry>[
-      CityScoreEntry(followersCount: ['Rijk'], numSegments: 2),
-      RoadScoreEntry(followersCount: ['Liza'], numSegments: 2),
-      CloisterScoreEntry(numTiles: 8, followersCount: ['Liza'])
-    ];
-    var game = Game(
-      name: 'Friday Night Game',
-      playerNames: ['Rijk', 'Liza'],
-      playerColours: ['blue', 'red'],
-    );
-    for (var scoreEntry in dummyScoreEntries) {
-      game.addScoreEntry(scoreEntry);
-    }
+    games ??= <Game>[];
+    loadFromLocal();
   }
 
   // -------------------------------------------------------------------------------------------------

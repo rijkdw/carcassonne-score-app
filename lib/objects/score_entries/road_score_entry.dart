@@ -19,11 +19,8 @@ class RoadScoreEntry extends CastleableStructureScoreEntry {
   // ------------------------------------------------------------
 
   RoadScoreEntry({
-    this.numSegments = 0,
-    this.hasInnOnLake = false,
-    this.finished = true,
-    dynamic castleOwners,
-    dynamic followersCount
+    this.numSegments = 0, this.hasInnOnLake = false, this.finished = true,
+    dynamic castleOwners, dynamic followersCount
   }) : super(
     castleOwners: castleOwners,
     followersCount: followersCount
@@ -38,8 +35,8 @@ class RoadScoreEntry extends CastleableStructureScoreEntry {
       numSegments: jsonMap['num_segments'],
       followersCount: jsonMap['followers_count'],
       castleOwners: jsonMap['castle_owners'],
-      finished: jsonMap['finished'],
-      hasInnOnLake: jsonMap['has_inn_on_lake'],
+      finished: jsonMap['finished'] ?? true,
+      hasInnOnLake: jsonMap['has_inn_on_lake'] ?? false,
     );
   }
 

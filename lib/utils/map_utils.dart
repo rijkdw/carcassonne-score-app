@@ -45,16 +45,12 @@ Map<T, int> listToCountMap<T>(List<T> list) {
 
 Map<T, num> accumulateMaps<T>(List<Map<T, num>> maps) {
   var returnMap = <T, num>{};
-  void accumulate(T key, num val) {
-    if (!returnMap.keys.contains(key)) {
-      returnMap[key] = 0;
-    }
-    returnMap[key] += val;
-  }
-
   for (var map in maps) {
     for (var key in map.keys) {
-      accumulate(key, map[key]);
+      if (!returnMap.containsKey(key)) {
+        returnMap[key] = 0;
+      }
+      returnMap[key] += map[key];
     }
   }
   return returnMap;
@@ -67,6 +63,14 @@ bool isEqual(Map<dynamic, dynamic> mapA, Map<dynamic, dynamic> mapB) {
       return false;
     }
     if (mapA[keyA] != mapB[keyA]) {
+      return false;
+    }
+  }
+  for (var keyB in mapB.keys) {
+    if (!mapA.containsKey(keyB)) {
+      return false;
+    }
+    if (mapB[keyB] != mapA[keyB]) {
       return false;
     }
   }
