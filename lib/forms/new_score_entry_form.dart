@@ -1,3 +1,4 @@
+import 'package:carcassonne_score_app/managers/games_manager.dart';
 import 'package:carcassonne_score_app/objects/game.dart';
 import 'package:carcassonne_score_app/objects/score_entries/flat_score_entry.dart';
 import 'package:carcassonne_score_app/objects/score_entries/score_entry.dart';
@@ -34,7 +35,7 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
     });
   }
 
-  String returnErrorMessage() {
+  String errorMessage() {
     if (selectedType == _SelectedScoreEntryType.manual) {
       if (!string_utils.isInteger(manualScoreTextEditingController.text)) {
         return 'Enter a valid score.';
@@ -47,7 +48,7 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
     return null;
   }
 
-  bool isInputAcceptable() => returnErrorMessage() == null;
+  bool isInputAcceptable() => errorMessage() == null;
 
   void acceptInput() {
     if (!isInputAcceptable()) {
@@ -61,6 +62,7 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       );
     }
     Provider.of<Game>(context, listen: false).addScoreEntry(newScoreEntry);
+    Provider.of<GamesManager>(context, listen: false).changeMadeSequence();
     Navigator.of(context).pop();
   }
 
@@ -180,7 +182,7 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
                 } else {
                   Scaffold.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(returnErrorMessage()),
+                      content: Text(errorMessage()),
                     ),
                   );
                 }

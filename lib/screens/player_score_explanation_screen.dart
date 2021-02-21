@@ -15,7 +15,7 @@ class PlayerScoreExplanationScreen extends StatelessWidget {
     var game = Provider.of<Game>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('${game.name} : ${player.name}'),
+        title: Text('${game.name} > ${player.name}'),
         backgroundColor: colour_utils.fromText(player.colour),
       ),
       body: ListView(
