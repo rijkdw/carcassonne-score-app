@@ -1,7 +1,12 @@
 import 'package:carcassonne_score_app/objects/game.dart';
+import 'package:carcassonne_score_app/objects/score_entries/flat_score_entry.dart';
+import 'package:carcassonne_score_app/objects/score_entries/score_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+
+import '../utils/list_utils.dart' as list_utils;
+import '../utils/string_utils.dart' as string_utils;
 
 class NewScoreEntryForm extends StatefulWidget {
   @override
@@ -11,13 +16,17 @@ class NewScoreEntryForm extends StatefulWidget {
 enum _SelectedScoreEntryType { manual, city, road, cloister, farm }
 
 class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
-  _SelectedScoreEntryType selectedType;
+  // -------------------------------------------------------------------------------------------------
+  // variables
+  // -------------------------------------------------------------------------------------------------
 
-  @override
-  void initState() {
-    selectedType = _SelectedScoreEntryType.manual;
-    super.initState();
-  }
+  _SelectedScoreEntryType selectedType = _SelectedScoreEntryType.manual;
+
+  // for the manual score entry's...
+  // ... player selection
+  var manualPlayerSelections = <String>[];
+  // ... score input
+  var manualScoreTextEditingController = TextEditingController();
 
   void setSelectedType(_SelectedScoreEntryType newType) {
     setState(() {
@@ -25,12 +34,42 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
     });
   }
 
+  String returnErrorMessage() {
+    if (selectedType == _SelectedScoreEntryType.manual) {
+      if (!string_utils.isInteger(manualScoreTextEditingController.text)) {
+        return 'Enter a valid score.';
+      } else if (manualPlayerSelections.isEmpty) {
+        return 'Select at least one player.';
+      } else {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  bool isInputAcceptable() => returnErrorMessage() == null;
+
+  void acceptInput() {
+    if (!isInputAcceptable()) {
+      throw Exception('Trying to accept input when input is not acceptable!');
+    }
+    ScoreEntry newScoreEntry;
+    if (selectedType == _SelectedScoreEntryType.manual) {
+      newScoreEntry = FlatScoreEntry(
+        playerNames: manualPlayerSelections,
+        score: int.parse(manualScoreTextEditingController.text),
+      );
+    }
+    Provider.of<Game>(context, listen: false).addScoreEntry(newScoreEntry);
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // -------------------------------------------------------------------------------------------------
-    // styles
-    // -------------------------------------------------------------------------------------------------
+    // variables
+    var game = Provider.of<Game>(context);
 
+    // styles
     var inputDecoration = InputDecoration(
       hintText: 'HINT TEXT',
       border: OutlineInputBorder(
@@ -38,9 +77,7 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       ),
     );
 
-    // -------------------------------------------------------------------------------------------------
     // widgets
-    // -------------------------------------------------------------------------------------------------
 
     // select the ScoreEntry type
     var typeSelector = Column(
@@ -65,16 +102,34 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
 
     // form for creating a manual score entry
     var manualChildren = <Widget>[
-      TextFormField(decoration: inputDecoration.copyWith(hintText: 'Points')),
+      // enter the score
+      TextFormField(
+        keyboardType: TextInputType.number,
+        decoration: inputDecoration.copyWith(hintText: 'Points'),
+        controller: manualScoreTextEditingController,
+      ),
       SizedBox(height: 10),
+      // select the players
       _MyHeader('Players'),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: Provider.of<Game>(context).playerNames.map((name) {
-          return Chip(
-            label: Text(name),
-          );
-        }).toList(),
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: list_utils.intersperse(
+              game.playerNames.map((name) {
+                return ChoiceChip(
+                  selected: manualPlayerSelections.contains(name),
+                  label: Text(name),
+                  onSelected: (newValue) {
+                    setState(() {
+                      if (!manualPlayerSelections.remove(name)) {
+                        manualPlayerSelections.add(name);
+                      }
+                    });
+                  },
+                );
+              }).toList(),
+              () => SizedBox(width: 10)),
+        ),
       )
     ];
 
@@ -114,6 +169,24 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
                 return manualChildren;
             }
           }(),
+          SizedBox(height: 10),
+          Center(
+            child: FlatButton(
+              child: Text('ACCEPT'),
+              onPressed: () {
+                print('Inputs are acceptable: ${isInputAcceptable()}');
+                if (isInputAcceptable()) {
+                  acceptInput();
+                } else {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(returnErrorMessage()),
+                    ),
+                  );
+                }
+              },
+            ),
+          )
         ],
       ),
     );
