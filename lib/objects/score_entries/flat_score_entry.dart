@@ -38,6 +38,13 @@ class FlatScoreEntry extends ScoreEntry {
       'player_names': playerNames
     };
   }
+
+  // -------------------------------------------------------------------------------------------------
+  // methods
+  // -------------------------------------------------------------------------------------------------
+
+  @override
+  String toString() => 'A flat score increase of $score to ${list_utils.sentencify(playerNames)}.';
   
   // ------------------------------------------------------------
   // getters

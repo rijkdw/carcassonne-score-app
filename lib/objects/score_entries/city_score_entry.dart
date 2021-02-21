@@ -40,8 +40,8 @@ class CityScoreEntry extends CastleableStructureScoreEntry {
     return CityScoreEntry(
       numSegments: jsonMap['num_segments'],
       numShields: jsonMap['num_shields'],
-      finished: jsonMap['finished'],
-      hasCathedral: jsonMap['has_cathedral'],
+      finished: jsonMap['finished'] ?? true,
+      hasCathedral: jsonMap['has_cathedral'] ?? false,
       castleOwners: jsonMap['castle_owners'],
       followersCount: jsonMap['followers_count']
     );

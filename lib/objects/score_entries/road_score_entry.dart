@@ -43,6 +43,7 @@ class RoadScoreEntry extends CastleableStructureScoreEntry {
   Map<String, dynamic> toJSON() {
     return {
       'type': 'road',
+      'num_segments': numSegments,
       'followers_count': followersCount,
       'castle_owners': castleOwners,
       'finished': finished,

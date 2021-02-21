@@ -22,7 +22,10 @@ class GameScreen extends StatelessWidget {
         child: Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return NewScoreEntryScreen();
+            return ChangeNotifierProvider.value(
+              value: game,
+              child: NewScoreEntryScreen(),
+            );
           }));
         },
       ),

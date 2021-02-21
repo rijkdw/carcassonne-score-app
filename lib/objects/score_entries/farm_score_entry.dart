@@ -36,7 +36,7 @@ class FarmScoreEntry extends StructureScoreEntry {
   factory FarmScoreEntry.fromJSON(Map<String, dynamic> jsonMap) {
     return FarmScoreEntry(
       followersCount: jsonMap['followers_count'],
-      hasBarn: jsonMap['has_barn'],
+      hasBarn: jsonMap['has_barn'] ?? false,
       numCastles: jsonMap['num_castles'],
       numCities: jsonMap['num_cities']
     );

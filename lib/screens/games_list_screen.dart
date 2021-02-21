@@ -2,6 +2,8 @@ import 'package:carcassonne_score_app/managers/games_manager.dart';
 import 'package:carcassonne_score_app/objects/game.dart';
 import 'package:carcassonne_score_app/objects/score_entries/city_score_entry.dart';
 import 'package:carcassonne_score_app/objects/score_entries/cloister_score_entry.dart';
+import 'package:carcassonne_score_app/objects/score_entries/farm_score_entry.dart';
+import 'package:carcassonne_score_app/objects/score_entries/flat_score_entry.dart';
 import 'package:carcassonne_score_app/objects/score_entries/road_score_entry.dart';
 import 'package:carcassonne_score_app/screens/new_game_screen.dart';
 import 'package:carcassonne_score_app/widgets/list_views/games_list_view.dart';
@@ -26,8 +28,10 @@ class GamesListScreen extends StatelessWidget {
                 scoreEntries: [
                   CityScoreEntry(followersCount: ['Rijk'], numSegments: 2),
                   RoadScoreEntry(followersCount: ['Liza'], numSegments: 2, castleOwners: ['Rijk']),
-                  CloisterScoreEntry(numTiles: 8, followersCount: ['Liza'])
-                ]
+                  CloisterScoreEntry(numTiles: 8, followersCount: ['Liza']),
+                  FarmScoreEntry(followersCount: ['Rijk', 'Liza', 'Liza'], numCities: 3),
+                  FlatScoreEntry(score: 10, playerNames: ['Rijk', 'Liza']),
+                ],
               );
               gamesManager.addNewGame(game);
             },

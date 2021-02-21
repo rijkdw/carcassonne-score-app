@@ -8,7 +8,10 @@ class NewScoreEntryScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('New Score Entry'),
       ),
-      body: NewScoreEntryForm(),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: NewScoreEntryForm(),
+      ),
     );
   }
 }

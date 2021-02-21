@@ -59,15 +59,21 @@ class _NewGameFormState extends State<NewGameForm> {
   @override
   Widget build(BuildContext context) {
     var fieldDecoration = InputDecoration(
-      hintText: 'GAME NAME',
+      hintText: 'HINT TEXT',
       border: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
     );
 
-    var gameNameFieldDecoration = fieldDecoration.copyWith(hintText: 'GAME NAME', hintStyle: TextStyle(fontSize: 20));
-    var playerNameFieldDecoration =
-        fieldDecoration.copyWith(hintText: 'PLAYER NAME', hintStyle: TextStyle(fontSize: 16));
+    var gameNameFieldDecoration = fieldDecoration.copyWith(
+      hintText: 'GAME NAME',
+      hintStyle: TextStyle(fontSize: 20),
+    );
+
+    var playerNameFieldDecoration = fieldDecoration.copyWith(
+      hintText: 'Player name',
+      hintStyle: TextStyle(fontSize: 16),
+    );
 
     return Form(
       key: formKey,
