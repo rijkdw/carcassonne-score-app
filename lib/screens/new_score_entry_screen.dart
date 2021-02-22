@@ -9,7 +9,7 @@ class NewScoreEntryScreen extends StatelessWidget {
         title: Text('New Score Entry'),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: NewScoreEntryForm(),
       ),
     );

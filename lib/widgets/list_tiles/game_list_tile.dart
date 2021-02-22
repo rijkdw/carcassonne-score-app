@@ -13,10 +13,15 @@ class GameListTile extends StatelessWidget {
       trailing: InkWell(
         child: Container(
           padding: EdgeInsets.all(4),
-          child: Icon(Icons.more_vert),
+          child: Icon(Icons.delete),
         ),
         onTap: () {
-          Scaffold.of(context).showSnackBar(SnackBar(content: Text('Deleted game \"${game.name}\".')));
+          // TODO a confirm button ("are you sure you want to delete this game?")
+          Scaffold.of(context).removeCurrentSnackBar();
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text('Deleted game \"${game.name}\".'),
+            duration: Duration(seconds: 2),
+          ));
           Provider.of<GamesManager>(context, listen: false).deleteGame(game);
         },
       ),

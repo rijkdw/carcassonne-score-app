@@ -45,8 +45,9 @@ class GamesListScreen extends StatelessWidget {
         ],
       ),
       body: GamesListView(),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('New Game'),
+        icon: Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
             return NewGameScreen();
