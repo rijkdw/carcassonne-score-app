@@ -61,9 +61,18 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
         score: int.parse(manualScoreTextEditingController.text),
       );
     }
-    Provider.of<Game>(context, listen: false).addScoreEntry(newScoreEntry);
-    Provider.of<GamesManager>(context, listen: false).changeMadeSequence();
-    Navigator.of(context).pop();
+    // TODO more if()
+    if (newScoreEntry != null) {
+      Provider.of<Game>(context, listen: false).addScoreEntry(newScoreEntry);
+      Provider.of<GamesManager>(context, listen: false).changeMadeSequence();
+      Navigator.of(context).pop();
+    } else {
+      Scaffold.of(context).hideCurrentSnackBar();
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Not yet supported'),
+        duration: Duration(seconds: 2),
+      ));
+    }
   }
 
   @override
