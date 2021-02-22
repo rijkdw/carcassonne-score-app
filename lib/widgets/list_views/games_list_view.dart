@@ -8,8 +8,9 @@ class GamesListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var gamesManager = Provider.of<GamesManager>(context);
+    var games = gamesManager.games ?? <Game>[];
     return ListView(
-      children: (gamesManager.games ?? <Game>[]).map((game) {
+      children: games.map((game) {
         return ChangeNotifierProvider.value(
           value: game,
           child: GameListTile(),

@@ -61,7 +61,18 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
         score: int.parse(manualScoreTextEditingController.text),
       );
     }
-    // TODO more if()
+    if (selectedType == _SelectedScoreEntryType.city) {
+      // TODO
+    }
+    if (selectedType == _SelectedScoreEntryType.road) {
+      // TODO
+    }
+    if (selectedType == _SelectedScoreEntryType.farm) {
+      // TODO
+    }
+    if (selectedType == _SelectedScoreEntryType.cloister) {
+      // TODO
+    }
     if (newScoreEntry != null) {
       Provider.of<Game>(context, listen: false).addScoreEntry(newScoreEntry);
       Provider.of<GamesManager>(context, listen: false).changeMadeSequence();
@@ -162,6 +173,8 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
         mainAxisSize: MainAxisSize.min,
         children: [
           typeSelector,
+          SizedBox(height: 10),
+          Divider(),
           SizedBox(height: 10),
           // use a callback function that uses a switch case to get the correct children
           ...() {

@@ -75,6 +75,8 @@ class Game extends ChangeNotifier {
     return map;
   }
 
+  bool get isFinished => name == "Dummy Game" ? true : false;
+
   List<Player> get players {
     var namesToScoresSaved = namesToScores;
     var players = List.generate(playerNames.length, (i) {

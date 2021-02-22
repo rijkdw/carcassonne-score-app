@@ -42,6 +42,18 @@ int count<T>(List<T> list, T target) {
   return counter;
 }
 
+Map<T, List<V>> splitListByCallback<T, V>(List<V> list, T Function(V item) callback) {
+  var returnMap = <T, List<V>>{};
+  for (var item in list) {
+    var callbackOnItem = callback(item);
+    if (!returnMap.containsKey(callbackOnItem)) {
+      returnMap[callbackOnItem] = <V>[];
+    }
+    returnMap[callbackOnItem].add(item);
+  }
+  return returnMap;
+}
+
 List<T> intersperse<T>(List<T> list, T Function() callback) {
   if (list.length < 2) return list;
   var returnList = <T>[];

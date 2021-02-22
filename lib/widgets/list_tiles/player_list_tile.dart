@@ -14,9 +14,11 @@ class PlayerListTile extends StatelessWidget {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: colour_utils.fromText(player.colour),
-        child: Text(
-          '${player.score}',
-          style: TextStyle(color: colour_utils.highContrastColourTo(player.colour)),
+        child: Container(
+          child: Text(
+            '${player.score}',
+            style: TextStyle(color: colour_utils.highContrastColourTo(player.colour), fontSize: 20),
+          ),
         ),
       ),
       title: Text(player.name),

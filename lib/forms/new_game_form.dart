@@ -66,7 +66,7 @@ class _NewGameFormState extends State<NewGameForm> {
     );
 
     var gameNameFieldDecoration = fieldDecoration.copyWith(
-      hintText: 'GAME NAME',
+      hintText: 'Game name',
       hintStyle: TextStyle(fontSize: 20),
     );
 
@@ -84,6 +84,7 @@ class _NewGameFormState extends State<NewGameForm> {
           children: [
             TextFormField(
               controller: gameNameTextEditingController,
+              textCapitalization: TextCapitalization.words,
               decoration: gameNameFieldDecoration,
             ),
             SizedBox(height: 10),
@@ -101,6 +102,7 @@ class _NewGameFormState extends State<NewGameForm> {
                     Expanded(
                       child: TextFormField(
                         decoration: playerNameFieldDecoration,
+                        textCapitalization: TextCapitalization.words,
                         controller: playerNameTextEditingControllers[index],
                       ),
                     ),
