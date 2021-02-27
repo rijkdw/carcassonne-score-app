@@ -98,6 +98,7 @@ class _ScoreExplanationListTile extends StatelessWidget {
                       text: "Edit",
                       iconData: Icons.edit,
                       onPressed: () {
+                        Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                           return NewScoreEntryScreen(
                             game: game,

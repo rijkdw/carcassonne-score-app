@@ -42,10 +42,7 @@ class ListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(text),
-      onTap: () {
-        Navigator.of(context).pop();
-        this.onPressed();
-      },
+      onTap: this.onPressed,
       leading: Icon(iconData),
     );
   }

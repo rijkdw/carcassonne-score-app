@@ -40,6 +40,17 @@ class GamesListScreen extends StatelessWidget {
                 name: 'empty game',
               );
               gamesManager.addNewGame(emptyGame);
+              var manualsGame = Game(
+                playerNames: ['Rijk', 'Liza'],
+                playerColours: ['blue', 'red'],
+                name: 'empty game',
+                scoreEntries: [
+                  FlatScoreEntry(score: 10, playerNames: ['Rijk', 'Liza']),
+                  FlatScoreEntry(score: 5, playerNames: ['Liza']),
+                  FlatScoreEntry(score: 7, playerNames: ['Rijk']),
+                ],
+              );
+              gamesManager.addNewGame(manualsGame);
             },
           ),
         ],
