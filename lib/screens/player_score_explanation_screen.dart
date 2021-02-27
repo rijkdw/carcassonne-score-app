@@ -1,3 +1,4 @@
+import 'package:carcassonne_score_app/dialogs/yes_no_dialog.dart';
 import 'package:carcassonne_score_app/managers/games_manager.dart';
 import 'package:carcassonne_score_app/objects/game.dart';
 import 'package:carcassonne_score_app/objects/player.dart';
@@ -31,8 +32,20 @@ class PlayerScoreExplanationScreen extends StatelessWidget {
                       trailing: IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {
-                          game.removeScoreEntry(scoreEntry);
-                          gamesManager.changeMadeSequence();
+                          showDialog(
+                            context: context,
+                            builder: (context) => YesNoDialog(
+                              title: "Delete ScoreEntry?",
+                              onYes: () {
+                                game.removeScoreEntry(scoreEntry);
+                                gamesManager.changeMadeSequence();
+                                Navigator.of(context).pop();
+                              },
+                              onNo: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          );
                         },
                       ),
                     );

@@ -9,7 +9,14 @@ import 'package:provider/provider.dart';
 import '../utils/list_utils.dart' as list_utils;
 import '../utils/string_utils.dart' as string_utils;
 
+
 class NewScoreEntryForm extends StatefulWidget {
+
+  List<String> initiallySelectedPlayers;
+  NewScoreEntryForm({this.initiallySelectedPlayers}) {
+    initiallySelectedPlayers ??= <String>[];
+  }
+
   @override
   _NewScoreEntryFormState createState() => _NewScoreEntryFormState();
 }
@@ -17,6 +24,7 @@ class NewScoreEntryForm extends StatefulWidget {
 enum _SelectedScoreEntryType { manual, city, road, cloister, farm }
 
 class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
+
   // -------------------------------------------------------------------------------------------------
   // variables
   // -------------------------------------------------------------------------------------------------
@@ -28,6 +36,12 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
   var manualPlayerSelections = <String>[];
   // ... score input
   var manualScoreTextEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    manualPlayerSelections = widget.initiallySelectedPlayers;
+    super.initState();
+  }
 
   void setSelectedType(_SelectedScoreEntryType newType) {
     setState(() {

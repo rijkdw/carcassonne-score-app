@@ -7,6 +7,10 @@ import 'score_entries/score_entry.dart';
 
 import '../utils/map_utils.dart' as map_utils;
 
+enum GameState{
+  finished, ongoing
+}
+
 
 class Game extends ChangeNotifier {
 
@@ -75,7 +79,7 @@ class Game extends ChangeNotifier {
     return map;
   }
 
-  bool get isFinished => name == "Dummy Game" ? true : false;
+  GameState get gameState => name == "Dummy Game" ? GameState.finished : GameState.ongoing;
 
   List<Player> get players {
     var namesToScoresSaved = namesToScores;

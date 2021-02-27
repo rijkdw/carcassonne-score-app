@@ -1,5 +1,6 @@
 import 'package:carcassonne_score_app/objects/game.dart';
 import 'package:carcassonne_score_app/objects/player.dart';
+import 'package:carcassonne_score_app/screens/new_score_entry_screen.dart';
 import 'package:carcassonne_score_app/screens/player_score_explanation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,16 +23,34 @@ class PlayerListTile extends StatelessWidget {
         ),
       ),
       title: Text(player.name),
+      trailing: IconButton(
+        icon: Icon(Icons.remove_red_eye_sharp),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(value: game),
+                Provider.value(value: player),
+              ],
+              child: PlayerScoreExplanationScreen(),
+            );
+          }));
+        },
+      ),
       onTap: () {
+        // opens to NewScoreEntryScreen with this player already selected
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return MultiProvider(
             providers: [
               ChangeNotifierProvider.value(value: game),
               Provider.value(value: player),
             ],
-            child: PlayerScoreExplanationScreen(),
+            child: NewScoreEntryScreen(
+              initiallySelectedPlayers: [player.name],
+            ),
           );
         }));
+        // could alternatively just be a dialog
       },
     );
   }
