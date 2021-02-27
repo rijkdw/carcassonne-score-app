@@ -8,10 +8,9 @@ import 'package:provider/provider.dart';
 
 import '../utils/list_utils.dart' as list_utils;
 import '../utils/string_utils.dart' as string_utils;
-
+import '../utils/colour_utils.dart' as colour_utils;
 
 class NewScoreEntryForm extends StatefulWidget {
-
   List<String> initiallySelectedPlayers;
   NewScoreEntryForm({this.initiallySelectedPlayers}) {
     initiallySelectedPlayers ??= <String>[];
@@ -24,7 +23,6 @@ class NewScoreEntryForm extends StatefulWidget {
 enum _SelectedScoreEntryType { manual, city, road, cloister, farm }
 
 class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
-
   // -------------------------------------------------------------------------------------------------
   // variables
   // -------------------------------------------------------------------------------------------------
@@ -151,14 +149,22 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: list_utils.intersperse(
-              game.playerNames.map((name) {
+              game.players.map((player) {
                 return ChoiceChip(
-                  selected: manualPlayerSelections.contains(name),
-                  label: Text(name),
+                  selectedColor: colour_utils.fromText(player.colour),
+                  selected: manualPlayerSelections.contains(player.name),
+                  label: Text(
+                    player.name,
+                    style: TextStyle(
+                      color: manualPlayerSelections.contains(player.name)
+                          ? colour_utils.highContrastColourTo(player.colour)
+                          : null,
+                    ),
+                  ),
                   onSelected: (newValue) {
                     setState(() {
-                      if (!manualPlayerSelections.remove(name)) {
-                        manualPlayerSelections.add(name);
+                      if (!manualPlayerSelections.remove(player.name)) {
+                        manualPlayerSelections.add(player.name);
                       }
                     });
                   },

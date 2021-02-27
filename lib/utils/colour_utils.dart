@@ -15,6 +15,20 @@ Color fromText(String colourName) {
   return colourMap[colourName];
 }
 
+Color fromTextDull(String colourName) {
+  colourName = colourName.toLowerCase();
+  var dullColourMap = {
+    "red": Colors.red[200],
+    "blue": Colors.blue[200],
+    "green": Colors.green[200],
+    "yellow": Colors.yellow[200],
+    "grey": Colors.grey[200],
+    "gray": Colors.grey[200],
+    "black": Colors.grey[600],
+  };
+  return dullColourMap[colourName];
+}
+
 Color highContrastColourTo(String colourName) {
   var highContrastColourMap = {
     "red": Colors.white,
