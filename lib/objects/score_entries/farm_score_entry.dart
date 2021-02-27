@@ -58,6 +58,9 @@ class FarmScoreEntry extends StructureScoreEntry {
   // ------------------------------------------------------------
 
   @override
+  String get properName => 'Farm';
+
+  @override
   int get structureScore {
     if (hasBarn) {
       return 5 * numCastles + 4 * numCities;

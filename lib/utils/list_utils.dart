@@ -54,14 +54,20 @@ Map<T, List<V>> splitListByCallback<T, V>(List<V> list, T Function(V item) callb
   return returnMap;
 }
 
-List<T> intersperse<T>(List<T> list, T Function() callback) {
-  if (list.length < 2) return list;
+List<T> intersperse<T>(List<T> list, T Function() callback, {bool addToEnd=false}) {
+  if (list.length < 2) {
+    if (addToEnd) return [...list, callback()];
+    else return list;
+  };
   var returnList = <T>[];
   for (var i = 0; i < list.length-1; i++) {
     returnList.add(list[i]);
     returnList.add(callback());
   }
   returnList.add(list.last);
+  if (addToEnd) {
+    returnList.add(callback());
+  }
   return returnList;
 }
 

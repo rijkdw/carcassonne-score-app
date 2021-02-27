@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/colour_utils.dart' as colour_utils;
-import '../utils/bool_utils.dart' as bool_utils;
-import '../utils/list_utils.dart' as list_utils;
+import '../../utils/colour_utils.dart' as colour_utils;
+import '../../utils/bool_utils.dart' as bool_utils;
+import '../../utils/list_utils.dart' as list_utils;
 
 class NewGameForm extends StatefulWidget {
   @override

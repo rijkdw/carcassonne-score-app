@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-
 class ListDialog extends StatelessWidget {
-
   String title;
   List<ListItem> listItems;
 
@@ -13,19 +11,27 @@ class ListDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: Column(
-        children: [
-          Text(title),
-          Divider(),
-          ...listItems
-        ],
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 30,
+              ),
+            ),
+            Divider(),
+            ...listItems
+          ],
+        ),
       ),
     );
   }
 }
 
 class ListItem extends StatelessWidget {
-
   String text;
   IconData iconData;
   void Function() onPressed;
@@ -36,7 +42,10 @@ class ListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(text),
-      onTap: onPressed,
+      onTap: () {
+        Navigator.of(context).pop();
+        this.onPressed();
+      },
       leading: Icon(iconData),
     );
   }

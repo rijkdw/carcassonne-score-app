@@ -56,6 +56,9 @@ class RoadScoreEntry extends CastleableStructureScoreEntry {
   // ------------------------------------------------------------
 
   @override
+  String get properName => 'Road';
+
+  @override
   int get structureScore {
     if (finished) {
       if (hasInnOnLake) {

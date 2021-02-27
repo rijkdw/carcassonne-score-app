@@ -6,13 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/list_utils.dart' as list_utils;
-import '../utils/string_utils.dart' as string_utils;
-import '../utils/colour_utils.dart' as colour_utils;
+import '../../utils/list_utils.dart' as list_utils;
+import '../../utils/string_utils.dart' as string_utils;
+import '../../utils/colour_utils.dart' as colour_utils;
 
 class NewScoreEntryForm extends StatefulWidget {
   List<String> initiallySelectedPlayers;
-  NewScoreEntryForm({this.initiallySelectedPlayers}) {
+  Game game;
+  ScoreEntry scoreEntry;
+  NewScoreEntryForm({this.initiallySelectedPlayers, this.game, this.scoreEntry}) {
     initiallySelectedPlayers ??= <String>[];
   }
 
@@ -21,13 +23,15 @@ class NewScoreEntryForm extends StatefulWidget {
 }
 
 enum _SelectedScoreEntryType { manual, city, road, cloister, farm }
+enum _FormMode { edit, create }
 
 class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
   // -------------------------------------------------------------------------------------------------
   // variables
   // -------------------------------------------------------------------------------------------------
 
-  _SelectedScoreEntryType selectedType = _SelectedScoreEntryType.manual;
+  _SelectedScoreEntryType selectedType;
+  _FormMode formMode;
 
   // for the manual score entry's...
   // ... player selection
@@ -37,14 +41,41 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
 
   @override
   void initState() {
-    manualPlayerSelections = widget.initiallySelectedPlayers;
+    print("initialising state");
+    if (widget.scoreEntry == null) {
+      print("no ScoreEntry");
+      formMode = _FormMode.create;
+      selectedType = _SelectedScoreEntryType.manual;
+      manualPlayerSelections = widget.initiallySelectedPlayers;
+    } else {
+      print("found a ScoreEntry");
+      formMode = _FormMode.edit;
+      switch (widget.scoreEntry.runtimeType) {
+        case FlatScoreEntry:
+          selectedType = _SelectedScoreEntryType.manual;
+          manualPlayerSelections = widget.scoreEntry.scoreMap.keys.toList();
+          manualScoreTextEditingController.text = "${widget.scoreEntry.scoreMap.values.first}";
+          break;
+        default:
+          break;
+      }
+      print(selectedType);
+    }
     super.initState();
   }
 
   void setSelectedType(_SelectedScoreEntryType newType) {
-    setState(() {
-      selectedType = newType;
-    });
+    if (formMode == _FormMode.create) {
+      setState(() {
+        selectedType = newType;
+      });
+    } else {
+      Scaffold.of(context).removeCurrentSnackBar();
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("Cannot change type when editing"),
+        duration: Duration(seconds: 2),
+      ));
+    }
   }
 
   String errorMessage() {
@@ -86,7 +117,10 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       // TODO
     }
     if (newScoreEntry != null) {
-      Provider.of<Game>(context, listen: false).addScoreEntry(newScoreEntry);
+      if (formMode == _FormMode.edit) {
+        widget.game.removeScoreEntry(widget.scoreEntry);
+      }
+      widget.game.addScoreEntry(newScoreEntry);
       Provider.of<GamesManager>(context, listen: false).changeMadeSequence();
       Navigator.of(context).pop();
     } else {
@@ -101,7 +135,7 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
   @override
   Widget build(BuildContext context) {
     // variables
-    var game = Provider.of<Game>(context);
+    var game = widget.game ?? Provider.of<Game>(context);
 
     // styles
     var inputDecoration = InputDecoration(
@@ -217,6 +251,7 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
           Center(
             child: FlatButton(
               child: Text('ACCEPT'),
+              color: Colors.brown,
               onPressed: () {
                 print('Inputs are acceptable: ${isInputAcceptable()}');
                 if (isInputAcceptable()) {

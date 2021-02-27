@@ -1,4 +1,4 @@
-import 'package:carcassonne_score_app/forms/new_game_form.dart';
+import 'package:carcassonne_score_app/widgets/forms/new_game_form.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

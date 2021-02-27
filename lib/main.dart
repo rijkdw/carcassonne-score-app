@@ -24,6 +24,10 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               primarySwatch: Colors.brown,
               visualDensity: VisualDensity.adaptivePlatformDensity,
+              buttonTheme: ButtonThemeData(
+                buttonColor: Colors.brown,
+                textTheme: ButtonTextTheme.primary,
+              ),
               chipTheme: ChipThemeData(
                 selectedColor: Colors.brown[400],
                 secondarySelectedColor: Colors.brown[400],

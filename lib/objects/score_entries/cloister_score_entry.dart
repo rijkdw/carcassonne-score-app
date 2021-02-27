@@ -52,6 +52,9 @@ class CloisterScoreEntry extends CastleableStructureScoreEntry {
   // ------------------------------------------------------------
 
   @override
+  String get properName => 'Cloister';
+
+  @override
   String toString() {
     var scoreExplain = '$numTiles tiles';
     

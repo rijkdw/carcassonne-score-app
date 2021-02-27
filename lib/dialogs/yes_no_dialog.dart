@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-
 class YesNoDialog extends StatelessWidget {
-
   String title;
   void Function() onYes;
   void Function() onNo;
@@ -17,8 +15,20 @@ class YesNoDialog extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FlatButton(onPressed: onYes, child: Text("Yes")),
-            FlatButton(onPressed: onNo, child: Text("No")),
+            FlatButton(
+              onPressed: () {
+                onYes();
+                Navigator.of(context).pop();
+              },
+              child: Text("Yes"),
+            ),
+            FlatButton(
+              onPressed: () {
+                onNo();
+                Navigator.of(context).pop();
+              },
+              child: Text("No"),
+            ),
           ],
         ),
       ],

@@ -45,6 +45,9 @@ class FlatScoreEntry extends ScoreEntry {
   // ------------------------------------------------------------
 
   @override
+  String get properName => 'Manual';
+
+  @override
   Map<String, int> get scoreMap {
     return Map<String, int>.fromIterables(playerNames, list_utils.makeList(score, playerNames.length));
   }

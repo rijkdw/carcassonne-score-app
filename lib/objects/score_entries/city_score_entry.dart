@@ -65,6 +65,9 @@ class CityScoreEntry extends CastleableStructureScoreEntry {
   // ------------------------------------------------------------
 
   @override
+  String get properName => 'City';
+
+  @override
   String toString() {
     var finishedString = finished ? 'finished' : 'unfinished';
     var cathedralString = hasCathedral ? 'with a cathedral' : 'without a cathedral';

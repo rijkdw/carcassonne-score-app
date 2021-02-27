@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/list_utils.dart' as list_utils;
-import '../../utils/bool_utils.dart' as bool_utils;
+
 
 class GamesListView extends StatelessWidget {
   @override
@@ -24,13 +24,13 @@ class GamesListView extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         );
-    var hasBothOngoingAndFinished = bool_utils.all(gamesSplitByState.values.map((v) => v.isNotEmpty).toList());
+    var hasBothOngoingAndFinished = gamesSplitByState.keys.length == 2;
     if (hasBothOngoingAndFinished) {
       return ListView(
         children: [
-          makeHeaderTile("Ongoing"),
+          makeHeaderTile("Ongoing games"),
           ...gamesSplitByState[GameState.ongoing].map(game2ListTile).toList(),
-          makeHeaderTile("Finished"),
+          makeHeaderTile("Finished games"),
           ...gamesSplitByState[GameState.finished].map(game2ListTile).toList(),
         ],
       );
