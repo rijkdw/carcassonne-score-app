@@ -10,7 +10,21 @@ import 'package:carcassonne_score_app/widgets/list_views/players_list_view.dart'
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class GameScreen extends StatelessWidget {
+class GameScreen extends StatefulWidget {
+  @override
+  _GameScreenState createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
+  int currentPageIndex;
+  List<Widget> pages = [PlayersListView()];
+
+  @override
+  void initState() {
+    currentPageIndex = 0;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var gamesManager = Provider.of<GamesManager>(context);
@@ -32,10 +46,27 @@ class GameScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: PlayersListView(),
+      // body: Container(
+      //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      //   child: PlayersListView(),
+      // ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentPageIndex,
+        onTap: (index) {
+          setState(() => currentPageIndex = index);
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list_rounded),
+            title: Text("Players"),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.score_rounded),
+            title: Text("Scores"),
+          )
+        ],
       ),
+      body: pages[currentPageIndex],
       floatingActionButton: FloatingActionButton.extended(
         label: Text('Add points'),
         icon: Icon(Icons.add),
