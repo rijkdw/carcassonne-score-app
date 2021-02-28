@@ -83,6 +83,14 @@ String join(List<dynamic> list, String delim) {
   return output;
 }
 
+List<T> countMap2List<T>(Map<T, int> countMap) {
+  var returnList = <T>[];
+  countMap.keys.forEach((key) {
+    returnList = [...returnList, ...List.generate(countMap[key], (index) => key)];
+  });
+  return returnList;
+}
+
 void main(List<String> args) {
   print(maxInList([1, 3, 5, 2, 3]));
 }
