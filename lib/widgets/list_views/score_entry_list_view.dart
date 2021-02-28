@@ -11,10 +11,13 @@ import 'package:provider/provider.dart';
 import '../../utils/list_utils.dart' as list_utils;
 import '../../utils/colour_utils.dart' as colour_utils;
 
+enum ScoreEntryListTileSize { big, small }
+
 class ScoreEntryListView extends StatelessWidget {
   List<ScoreEntry> scoreEntries;
+  ScoreEntryListTileSize tileSize;
 
-  ScoreEntryListView({this.scoreEntries}) {
+  ScoreEntryListView({this.scoreEntries, this.tileSize = ScoreEntryListTileSize.big}) {
     this.scoreEntries ??= <ScoreEntry>[];
   }
 
@@ -36,6 +39,9 @@ class ScoreEntryListView extends StatelessWidget {
 }
 
 class _ScoreExplanationListTile extends StatelessWidget {
+  ScoreEntryListTileSize tileSize;
+  _ScoreExplanationListTile({this.tileSize = ScoreEntryListTileSize.big});
+
   @override
   Widget build(BuildContext context) {
     var scoreEntry = Provider.of<ScoreEntry>(context);
@@ -55,7 +61,10 @@ class _ScoreExplanationListTile extends StatelessWidget {
       return CircleAvatar(
         child: Text(
           "${scoreEntry.scoreMap[name]}",
-          style: TextStyle(color: colour_utils.highContrastColourTo(player.colour), fontSize: 20),
+          style: TextStyle(
+            color: colour_utils.highContrastColourTo(player.colour),
+            fontSize: tileSize == ScoreEntryListTileSize.big ? 20 : 16,
+          ),
         ),
         backgroundColor: colour_utils.fromText(player.colour),
       );

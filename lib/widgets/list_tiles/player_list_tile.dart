@@ -24,7 +24,7 @@ class PlayerListTile extends StatelessWidget {
       ),
       title: Text(player.name),
       trailing: IconButton(
-        icon: Icon(Icons.remove_red_eye_rounded),
+        icon: Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
             return MultiProvider(
@@ -32,7 +32,9 @@ class PlayerListTile extends StatelessWidget {
                 ChangeNotifierProvider.value(value: game),
                 Provider.value(value: player),
               ],
-              child: ScoreExplanationScreen(),
+              child: NewScoreEntryScreen(
+                initiallySelectedPlayers: [player.name],
+              ),
             );
           }));
         },
@@ -45,12 +47,9 @@ class PlayerListTile extends StatelessWidget {
               ChangeNotifierProvider.value(value: game),
               Provider.value(value: player),
             ],
-            child: NewScoreEntryScreen(
-              initiallySelectedPlayers: [player.name],
-            ),
+            child: ScoreExplanationScreen(),
           );
         }));
-        // could alternatively just be a dialog
       },
     );
   }
