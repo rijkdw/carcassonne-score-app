@@ -5,32 +5,33 @@ import 'package:carcassonne_score_app/objects/game.dart';
 import 'package:carcassonne_score_app/objects/player.dart';
 import 'package:carcassonne_score_app/objects/score_entries/score_entry.dart';
 import 'package:carcassonne_score_app/screens/new_score_entry_screen.dart';
-import 'package:carcassonne_score_app/widgets/list_views/score_entry_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/list_utils.dart' as list_utils;
-import '../utils/colour_utils.dart' as colour_utils;
+import '../../utils/list_utils.dart' as list_utils;
+import '../../utils/colour_utils.dart' as colour_utils;
 
+class ScoreEntryListView extends StatelessWidget {
+  List<ScoreEntry> scoreEntries;
 
-class ScoreExplanationScreen extends StatelessWidget {
+  ScoreEntryListView({this.scoreEntries}) {
+    this.scoreEntries ??= <ScoreEntry>[];
+  }
+
   @override
   Widget build(BuildContext context) {
-    Player player;
-    try {
-      player = Provider.of<Player>(context);
-    } catch (e) {}
-    var game = Provider.of<Game>(context);
-    var scoreEntries = player == null ? game.scoreEntries : game.getScoreEntriesBenefitting(player.name);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${game.name} > ${player == null ? "Scores" : player.name}'),
-        backgroundColor: player == null ? null : colour_utils.fromText(player.colour),
-      ),
-      body: ScoreEntryListView(
-        scoreEntries: scoreEntries,
-      ),
-    );
+    return scoreEntries.isEmpty
+        ? Center(
+            child: Text('No points :('),
+          )
+        : ListView(
+            children: scoreEntries.map((scoreEntry) {
+              return Provider.value(
+                value: scoreEntry,
+                child: _ScoreExplanationListTile(),
+              );
+            }).toList(),
+          );
   }
 }
 
@@ -43,7 +44,6 @@ class _ScoreExplanationListTile extends StatelessWidget {
 
     var keys = scoreEntry.scoreMap.keys.toList();
     keys.sort((a, b) => a.compareTo(b));
-    print(keys);
     var circleAvatars = keys.map((name) {
       var player = game.players.where((player) => player.name == name).first;
       try {
@@ -61,11 +61,6 @@ class _ScoreExplanationListTile extends StatelessWidget {
       );
     }).toList();
     circleAvatars.remove(null);
-    // circleAvatars.sort((a, b) {
-    //   var compareToResult = int.parse((a.child as Text).data).compareTo(int.parse((b.child as Text).data));
-    //   if (compareToResult != 0) return compareToResult;
-    //   return 1;
-    // });
 
     return ExpansionTile(
       title: Row(

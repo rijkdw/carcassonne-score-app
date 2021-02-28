@@ -117,10 +117,11 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       // TODO
     }
     if (newScoreEntry != null) {
+      var game = (widget.game ?? Provider.of<Game>(context, listen: false));
       if (formMode == _FormMode.edit) {
-        widget.game.removeScoreEntry(widget.scoreEntry);
+        game.removeScoreEntry(widget.scoreEntry);
       }
-      widget.game.addScoreEntry(newScoreEntry);
+      game.addScoreEntry(newScoreEntry);
       Provider.of<GamesManager>(context, listen: false).changeMadeSequence();
       Navigator.of(context).pop();
     } else {

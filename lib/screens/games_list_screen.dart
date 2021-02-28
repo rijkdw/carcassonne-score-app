@@ -43,9 +43,10 @@ class GamesListScreen extends StatelessWidget {
               var manualsGame = Game(
                 playerNames: ['Rijk', 'Liza'],
                 playerColours: ['blue', 'red'],
-                name: 'empty game',
+                name: 'Flats',
                 scoreEntries: [
                   FlatScoreEntry(score: 10, playerNames: ['Rijk', 'Liza']),
+                  FlatScoreEntry(score: 20, playerNames: ['Liza', 'Rijk']),
                   FlatScoreEntry(score: 5, playerNames: ['Liza']),
                   FlatScoreEntry(score: 7, playerNames: ['Rijk']),
                 ],
