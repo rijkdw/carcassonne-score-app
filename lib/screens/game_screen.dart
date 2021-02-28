@@ -46,8 +46,9 @@ class _GameScreenState extends State<GameScreen> {
       appBar: AppBar(
         title: Text(game.name),
         actions: [
-          IconButton(
-            icon: Icon(Icons.add),
+          FlatButton.icon(
+            label: Text("Add points", style: TextStyle(color: Colors.white)),
+            icon: Icon(Icons.add, color: Colors.white),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return ChangeNotifierProvider.value(
@@ -60,6 +61,10 @@ class _GameScreenState extends State<GameScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white.withOpacity(0.5),
+        unselectedFontSize: 14,
         currentIndex: currentPageIndex,
         onTap: (index) {
           setState(() => currentPageIndex = index);
