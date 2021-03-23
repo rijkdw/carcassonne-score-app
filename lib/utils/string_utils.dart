@@ -6,3 +6,7 @@ bool isInteger(String input) {
     return false;
   }
 }
+
+bool isNonNegativeInteger(String input) {
+  return isInteger(input) && int.parse(input) >= 0;
+}

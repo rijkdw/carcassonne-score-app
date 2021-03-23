@@ -48,7 +48,10 @@ class _ScoreExplanationListTile extends StatelessWidget {
     var game = Provider.of<Game>(context);
     var gamesManager = Provider.of<GamesManager>(context);
 
-    var keys = scoreEntry.scoreMap.keys.toList();
+    var keys = <String>[];
+    for (String name in scoreEntry.scoreMap.keys) {
+      if (scoreEntry.scoreMap[name] > 0) keys.add(name);
+    }
     keys.sort((a, b) => a.compareTo(b));
     var circleAvatars = keys.map((name) {
       var player = game.players.where((player) => player.name == name).first;

@@ -58,7 +58,9 @@ class Game extends ChangeNotifier {
     var returnList = <ScoreEntry>[];
     for (var scoreEntry in scoreEntries) {
       if (scoreEntry.scoreMap.containsKey(playerName)) {
-        returnList.add(scoreEntry);
+        if (scoreEntry.scoreMap[playerName] > 0) {
+          returnList.add(scoreEntry);
+        }
       }
     }
     return returnList;

@@ -12,7 +12,7 @@ class ListDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
+        padding: EdgeInsets.symmetric(vertical: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -22,6 +22,7 @@ class ListDialog extends StatelessWidget {
                 fontSize: 30,
               ),
             ),
+            SizedBox(height: 10),
             Divider(),
             ...listItems
           ],

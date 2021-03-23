@@ -18,6 +18,7 @@ class GamesListScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Games'),
         actions: [
+          // TODO remove this button
           IconButton(
             icon: Icon(Icons.bug_report),
             onPressed: () {
@@ -54,6 +55,13 @@ class GamesListScreen extends StatelessWidget {
               gamesManager.addNewGame(manualsGame);
             },
           ),
+          // TODO remove this button
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              gamesManager.deleteAllGames();
+            },
+          )
         ],
       ),
       body: GamesListView(),

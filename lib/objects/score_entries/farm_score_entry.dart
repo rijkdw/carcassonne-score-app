@@ -74,6 +74,8 @@ class FarmScoreEntry extends StructureScoreEntry {
     var cityMult = hasBarn ? 4 : 3;
     var castleMult = hasBarn ? 5 : 4;
     var scoreExplain = '$numCities cities worth $cityMult each, $numCastles castles worth $castleMult each';
+    if (hasBarn) scoreExplain += ' with a barn';
+    else scoreExplain += ' without a barn';
     
     var structureNameAndScore = 'A farm worth $structureScore points';
     var ownedBy = '${list_utils.sentencify(owners)} (followers: $followersToString)';

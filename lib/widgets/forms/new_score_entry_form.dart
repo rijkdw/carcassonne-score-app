@@ -1,6 +1,9 @@
 import 'package:carcassonne_score_app/managers/games_manager.dart';
 import 'package:carcassonne_score_app/objects/game.dart';
+import 'package:carcassonne_score_app/objects/player.dart';
 import 'package:carcassonne_score_app/objects/score_entries/city_score_entry.dart';
+import 'package:carcassonne_score_app/objects/score_entries/cloister_score_entry.dart';
+import 'package:carcassonne_score_app/objects/score_entries/farm_score_entry.dart';
 import 'package:carcassonne_score_app/objects/score_entries/flat_score_entry.dart';
 import 'package:carcassonne_score_app/objects/score_entries/road_score_entry.dart';
 import 'package:carcassonne_score_app/objects/score_entries/score_entry.dart';
@@ -11,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../../utils/list_utils.dart' as list_utils;
 import '../../utils/string_utils.dart' as string_utils;
 import '../../utils/colour_utils.dart' as colour_utils;
+import '../../utils/bool_utils.dart' as bool_utils;
 
 class NewScoreEntryForm extends StatefulWidget {
   List<String> initiallySelectedPlayers;
@@ -42,22 +46,32 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
   var manualScoreTextEditingController = TextEditingController();
 
   // for follower-able structures
-  var followerCountMap;
+  Map<String, int> followerCountMap;
 
   // for castleable structures' castles
-  var castleCountMap;
+  Map<String, int> castleCountMap;
 
   // for finish-able structures (cities, roads, cloisters)
   var isStructureFinished;
 
-  // for inn-on-lake and cathedrals
-  var hasInnOnLake;
-  var hasCathedral;
+  // for inn-on-lake, cathedrals, barns
+  bool hasInnOnLake;
+  bool hasCathedral;
+  bool hasBarn;
 
+  // for cities
   var cityNumSegmentsTextEditingController = TextEditingController();
   var cityNumShieldsTextEditingController = TextEditingController();
 
+  // for roads
   var roadNumSegmentsTextEditingController = TextEditingController();
+
+  // for cloisters
+  var cloisterNumTilesTextEditingController = TextEditingController();
+
+  // for farms
+  var farmNumCitiesTextEditingController = TextEditingController();
+  var farmNumCastlesTextEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -66,6 +80,7 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
     isStructureFinished = true;
     hasInnOnLake = false;
     hasCathedral = false;
+    hasBarn = false;
     castleCountMap = Map<String, int>.fromIterables(
       game.players.map((player) => player.name),
       List.generate(game.players.length, (index) => 0),
@@ -117,19 +132,74 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
   }
 
   String errorMessage() {
+    // NOTE return null if no error
+    // manual
     if (selectedType == _SelectedScoreEntryType.manual) {
+      // A valid score must be given.
       if (!string_utils.isInteger(manualScoreTextEditingController.text)) {
         return 'Enter a valid score.';
-      } else if (manualPlayerSelections.isEmpty) {
+      }
+      // At least one player must be selected.
+      if (manualPlayerSelections.isEmpty) {
         return 'Select at least one player.';
-      } else {
+      }
+      return null;
+    }
+    // follower-based
+    if (selectedType != _SelectedScoreEntryType.manual) {
+      // There must be a follower on the structure.
+      if (!bool_utils.any(followerCountMap.values.map((count) => count > 0).toList())) {
+        return 'At least one follower must be placed to score.';
+      }
+    }
+    // road
+    if (selectedType == _SelectedScoreEntryType.road) {
+      // A valid number of road segments must be entered.
+      if (!string_utils.isNonNegativeInteger(roadNumSegmentsTextEditingController.text)) {
+        return 'Enter a valid number of road segments.';
+      }
+    }
+    // city
+    if (selectedType == _SelectedScoreEntryType.city) {
+      var numSegStr = cityNumSegmentsTextEditingController.text;
+      var numShieldStr = cityNumShieldsTextEditingController.text;
+      // A valid number of city segments must be entered.
+      if (!string_utils.isNonNegativeInteger(numSegStr)) {
+        return 'Enter a valid number of city segments.';
+      }
+      // A valid number of shields, or no text at all.
+      if (!string_utils.isNonNegativeInteger(numShieldStr) && numShieldStr.isNotEmpty) {
+        return 'Enter a valid number of shields.';
+      }
+      return null;
+    }
+    // farm
+    if (selectedType == _SelectedScoreEntryType.farm) {
+      // Either A) a valid number of cities or B) a valid number of castles
+      if (string_utils.isNonNegativeInteger(farmNumCitiesTextEditingController.text) ||
+          string_utils.isNonNegativeInteger(farmNumCastlesTextEditingController.text)) {
         return null;
       }
+      return 'Enter a valid number of cities or farms.';
+    }
+    // cloister
+    if (selectedType == _SelectedScoreEntryType.cloister) {
+      // Must have valid number of tiles input
+      if (!string_utils.isNonNegativeInteger(cloisterNumTilesTextEditingController.text)) {
+        return 'Enter a valid number of tiles.';
+      }
+      if (int.parse(cloisterNumTilesTextEditingController.text) > 8) {
+        return 'A cloister tile cannot be surrounded by more than 8 tiles.';
+      }
+      return null;
     }
     return null;
   }
 
-  bool isInputAcceptable() => errorMessage() == null;
+  bool isInputAcceptable() {
+    /// Are the given inputs acceptable?
+    return errorMessage() == null;
+  }
 
   void acceptInput() {
     if (!isInputAcceptable()) {
@@ -143,25 +213,40 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       );
     }
     if (selectedType == _SelectedScoreEntryType.city) {
-      // TODO
       newScoreEntry = CityScoreEntry(
-        followersCount: null,
-        numSegments: null,
-        numShields: null,
+        followersCount: followerCountMap,
+        castleOwners: castleCountMap,
+        numSegments: int.parse(cityNumSegmentsTextEditingController.text),
+        numShields:
+            cityNumShieldsTextEditingController.text.isEmpty ? 0 : int.parse(cityNumShieldsTextEditingController.text),
         finished: isStructureFinished,
-        castleOwners: List<String>.from(list_utils.countMap2List(castleCountMap)),
         hasCathedral: hasCathedral,
       );
     }
     if (selectedType == _SelectedScoreEntryType.road) {
-      // TODO
-      newScoreEntry = RoadScoreEntry();
+      newScoreEntry = RoadScoreEntry(
+        followersCount: followerCountMap,
+        castleOwners: castleCountMap,
+        numSegments: int.parse(roadNumSegmentsTextEditingController.text),
+        finished: isStructureFinished,
+        hasInnOnLake: hasInnOnLake,
+      );
     }
     if (selectedType == _SelectedScoreEntryType.farm) {
-      // TODO
+      newScoreEntry = FarmScoreEntry(
+        followersCount: followerCountMap,
+        hasBarn: hasBarn,
+        numCities:
+            farmNumCitiesTextEditingController.text.isEmpty ? 0 : int.parse(farmNumCitiesTextEditingController.text),
+        numCastles:
+            farmNumCastlesTextEditingController.text.isEmpty ? 0 : int.parse(farmNumCastlesTextEditingController.text),
+      );
     }
     if (selectedType == _SelectedScoreEntryType.cloister) {
-      // TODO
+      newScoreEntry = CloisterScoreEntry(
+        numTiles: int.parse(cloisterNumTilesTextEditingController.text),
+        castleOwners: castleCountMap,
+      );
     }
     if (newScoreEntry != null) {
       var game = (widget.game ?? Provider.of<Game>(context, listen: false));
@@ -257,78 +342,87 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       )
     ];
 
+    // player info, minus-icon, value, plus-icon
+    Widget buildPlayerRow({Player player, VoidCallback onPlus, VoidCallback onMinus, String text}) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(player.name),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                      onMinus();
+                    },
+                    child: Icon(Icons.arrow_left_rounded, size: 30),
+                  ),
+                  CircleAvatar(
+                    backgroundColor: text == '0' ? colour_utils.fromTextDull(player.colour) : colour_utils.fromText(player.colour),
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: colour_utils.highContrastColourTo(player.colour),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                      onPlus();
+                    },
+                    child: Icon(Icons.arrow_right_rounded, size: 30),
+                  ),
+                ],
+              )
+            ],
+          ),
+          SizedBox(height: 4),
+        ],
+      );
+    }
+
     // form for followers
     var followerChildren = <Widget>[
       Divider(),
+      SizedBox(height: 10),
       _MyHeader('Followers'),
       SizedBox(height: 10),
       ...game.players.map((player) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(player.name),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      if (followerCountMap[player.name] > 0) followerCountMap[player.name]--;
-                    });
-                  },
-                  child: Icon(Icons.remove),
-                ),
-                Text('${followerCountMap[player.name]}'),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      followerCountMap[player.name]++;
-                    });
-                  },
-                  child: Icon(Icons.add),
-                ),
-              ],
-            )
-          ],
+        return buildPlayerRow(
+          player: player,
+          text: '${followerCountMap[player.name]}',
+          onPlus: () => setState(() => followerCountMap[player.name]++),
+          onMinus: () => setState(() {
+            if (followerCountMap[player.name] > 0) followerCountMap[player.name]--;
+          }),
         );
       }).toList(),
+      SizedBox(height: 10),
     ];
 
     // form for castles
     var castleChildren = <Widget>[
       Divider(),
+      SizedBox(height: 10),
       _MyHeader('Castles'),
       SizedBox(height: 10),
       ...game.players.map((player) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(player.name),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      if (castleCountMap[player.name] > 0) castleCountMap[player.name]--;
-                    });
-                  },
-                  child: Icon(Icons.remove),
-                ),
-                Text('${castleCountMap[player.name]}'),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      castleCountMap[player.name]++;
-                    });
-                  },
-                  child: Icon(Icons.add),
-                ),
-              ],
-            )
-          ],
+        return buildPlayerRow(
+          player: player,
+          text: '${castleCountMap[player.name]}',
+          onPlus: () => setState(() => castleCountMap[player.name]++),
+          onMinus: () => setState(() {
+            if (castleCountMap[player.name] > 0) castleCountMap[player.name]--;
+          }),
         );
       }).toList(),
+      SizedBox(height: 10),
     ];
 
     Widget buildCheckboxRow({String text, bool value, Function(bool) onChanged}) {
@@ -354,13 +448,13 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       SizedBox(height: 10),
       TextFormField(
         keyboardType: TextInputType.number,
-        decoration: inputDecoration.copyWith(hintText: 'Num segments'),
+        decoration: inputDecoration.copyWith(hintText: 'Number of city segments'),
         controller: cityNumSegmentsTextEditingController,
       ),
       SizedBox(height: 10),
       TextFormField(
         keyboardType: TextInputType.number,
-        decoration: inputDecoration.copyWith(hintText: 'Num shields'),
+        decoration: inputDecoration.copyWith(hintText: 'Number of shields'),
         controller: cityNumShieldsTextEditingController,
       ),
       SizedBox(height: 10),
@@ -380,30 +474,65 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       SizedBox(height: 10),
       TextFormField(
         keyboardType: TextInputType.number,
-        decoration: inputDecoration.copyWith(hintText: 'Num segments'),
+        decoration: inputDecoration.copyWith(hintText: 'Number of road segments'),
         controller: roadNumSegmentsTextEditingController,
       ),
+      SizedBox(height: 10),
       finishedCheckboxRow,
       buildCheckboxRow(
         text: 'Has inn on lake',
         value: hasInnOnLake,
-        onChanged: (newVal) => setState(() => hasInnOnLake = newVal)
+        onChanged: (newVal) => setState(() => hasInnOnLake = newVal),
       ),
       ...followerChildren,
       ...castleChildren,
     ];
 
     // form for creating a cloister
-    var cloisterChildren = <Widget>[Divider(), ...castleChildren];
+    var cloisterChildren = <Widget>[
+      _MyHeader('Structure'),
+      SizedBox(height: 10),
+      TextFormField(
+        keyboardType: TextInputType.number,
+        decoration: inputDecoration.copyWith(hintText: 'Number of tiles surrounding'),
+        controller: roadNumSegmentsTextEditingController,
+      ),
+      SizedBox(height: 10),
+      ...followerChildren,
+      ...castleChildren,
+    ];
 
     // form for creating a farm
-    var farmChildren = <Widget>[];
+    var farmChildren = <Widget>[
+      _MyHeader('Structures'),
+      SizedBox(height: 10),
+      TextFormField(
+        keyboardType: TextInputType.number,
+        decoration: inputDecoration.copyWith(hintText: 'Number of cities'),
+        controller: farmNumCitiesTextEditingController,
+      ),
+      SizedBox(height: 10),
+      TextFormField(
+        keyboardType: TextInputType.number,
+        decoration: inputDecoration.copyWith(hintText: 'Number of castles'),
+        controller: farmNumCastlesTextEditingController,
+      ),
+      SizedBox(height: 10),
+      buildCheckboxRow(
+        text: 'Has barn',
+        value: hasBarn,
+        onChanged: (newVal) => setState(() => hasBarn = newVal),
+      ),
+      SizedBox(height: 10),
+      ...followerChildren,
+    ];
 
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+          SizedBox(height: 20),
           typeSelector,
           SizedBox(height: 10),
           Divider(),
@@ -443,7 +572,8 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
                 }
               },
             ),
-          )
+          ),
+          SizedBox(height: 20),
         ],
       ),
     );
