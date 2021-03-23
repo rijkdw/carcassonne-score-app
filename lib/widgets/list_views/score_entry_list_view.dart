@@ -101,19 +101,20 @@ class _ScoreExplanationListTile extends StatelessWidget {
                 var dialog = ListDialog(
                   title: "${scoreEntry.properName}",
                   listItems: [
-                    ListItem(
-                      text: "Edit",
-                      iconData: Icons.edit,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                          return NewScoreEntryScreen(
-                            game: game,
-                            scoreEntry: scoreEntry,
-                          );
-                        }));
-                      },
-                    ),
+                    // TODO figure out the fucking provider kak
+                    // ListItem(
+                    //   text: "Edit",
+                    //   iconData: Icons.edit,
+                    //   onPressed: () {
+                    //     Navigator.of(context).pop();
+                    //     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                    //       return NewScoreEntryScreen(
+                    //         game: game,
+                    //         scoreEntry: scoreEntry,
+                    //       );
+                    //     }));
+                    //   },
+                    // ),
                     ListItem(
                       text: "Delete",
                       iconData: Icons.delete,

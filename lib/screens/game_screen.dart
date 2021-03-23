@@ -18,11 +18,14 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   int currentPageIndex;
+  String selectedPlayerName;
   List<Widget> pages;
+  List<List<Widget>> listOfActionLists;
 
   @override
   void initState() {
     currentPageIndex = 0;
+    selectedPlayerName = 'All';
     super.initState();
   }
 
@@ -35,6 +38,51 @@ class _GameScreenState extends State<GameScreen> {
         scoreEntries: Provider.of<Game>(context).scoreEntries,
       ),
     ];
+    var game = Provider.of<Game>(context);
+    listOfActionLists = [
+      // first
+      [
+        FlatButton.icon(
+          label: Text("Add points", style: TextStyle(color: Colors.white)),
+          icon: Icon(Icons.add, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return ChangeNotifierProvider.value(
+                value: game,
+                child: NewScoreEntryScreen(),
+              );
+            }));
+          },
+        )
+      ],
+      // second
+      [
+        // DropdownButton(
+        //   value: selectedPlayerName,
+        //   style: TextStyle(color: Colors.white),
+        //   items: [
+        //     DropdownMenuItem(
+        //       value: 'All',
+        //       child: Text('All'),
+        //     ),
+        //     ...game.players
+        //         .map(
+        //           (player) => DropdownMenuItem(
+        //             child: Text(player.name),
+        //             value: player.name,
+        //           ),
+        //         )
+        //         .toList(),
+        //   ],
+        //   onChanged: (newVal) {
+        //     print(newVal);
+        //     setState(() {
+        //       selectedPlayerName = newVal;
+        //     });
+        //   },
+        // ),
+      ],
+    ];
     super.didChangeDependencies();
   }
 
@@ -45,20 +93,7 @@ class _GameScreenState extends State<GameScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(game.name),
-        actions: [
-          FlatButton.icon(
-            label: Text("Add points", style: TextStyle(color: Colors.white)),
-            icon: Icon(Icons.add, color: Colors.white),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return ChangeNotifierProvider.value(
-                  value: game,
-                  child: NewScoreEntryScreen(),
-                );
-              }));
-            },
-          )
-        ],
+        actions: listOfActionLists[currentPageIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
