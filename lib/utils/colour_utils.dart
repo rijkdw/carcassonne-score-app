@@ -22,8 +22,8 @@ Color fromTextDull(String colourName) {
     "blue": Colors.blue[200],
     "green": Colors.green[200],
     "yellow": Colors.yellow[200],
-    "grey": Colors.grey[200],
-    "gray": Colors.grey[200],
+    "grey": Colors.grey[300],
+    "gray": Colors.grey[300],
     "black": Colors.grey[600],
   };
   return dullColourMap[colourName];

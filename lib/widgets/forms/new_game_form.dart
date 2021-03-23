@@ -20,8 +20,16 @@ class _NewGameFormState extends State<NewGameForm> {
 
   var colours = ['Red', 'Blue', 'Yellow', 'Green', 'Gray', 'Black'];
 
+  void trimTextEditingControllers() {
+    playerNameTextEditingControllers.forEach((c) => c.text = c.text.trim());
+  }
+
   bool hasEnoughPlayers() {
-    return list_utils.count(playerNameTextEditingControllers.map((c) => c.text.isNotEmpty).toList(), true) >= 2;
+    return list_utils.count(playerNameTextEditingControllers.map((c) => c.text.trim().isNotEmpty).toList(), true) >= 2;
+  }
+
+  bool hasDuplicatePlayerNames() {
+    return list_utils.containsDuplicates(playerNameTextEditingControllers.map((c) => c.text.trim()).toList());
   }
 
   bool hasGameName() => gameNameTextEditingController.text.isNotEmpty;
@@ -50,6 +58,8 @@ class _NewGameFormState extends State<NewGameForm> {
       message = 'Enter a game name.';
     } else if (!hasEnoughPlayers()) {
       message = 'Can\'t play with less than two players.';
+    } else if (hasDuplicatePlayerNames()) {
+      message = 'Can\'t have duplicate player names.';
     }
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(message),
@@ -96,7 +106,10 @@ class _NewGameFormState extends State<NewGameForm> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CircleAvatar(
-                      backgroundColor: colour_utils.fromText(colours[index]),
+                      // if no player yet, dull the CircleAvatar
+                      backgroundColor: playerNameTextEditingControllers[index].text.isEmpty
+                          ? colour_utils.fromTextDull(colours[index])
+                          : colour_utils.fromText(colours[index]),
                     ),
                     SizedBox(width: 20),
                     Expanded(
@@ -104,6 +117,9 @@ class _NewGameFormState extends State<NewGameForm> {
                         decoration: playerNameFieldDecoration,
                         textCapitalization: TextCapitalization.words,
                         controller: playerNameTextEditingControllers[index],
+                        onChanged: (newText) {  // update state to make CircleAvatars "light up"
+                          setState(() {});
+                        },
                       ),
                     ),
                   ],
@@ -114,7 +130,8 @@ class _NewGameFormState extends State<NewGameForm> {
             FlatButton(
               child: Text('ACCEPT'),
               onPressed: () {
-                if (hasGameName() && hasEnoughPlayers()) {
+                trimTextEditingControllers();
+                if (hasGameName() && hasEnoughPlayers() && !hasDuplicatePlayerNames()) {
                   acceptInputs();
                 } else {
                   reportErroneousInputs();
