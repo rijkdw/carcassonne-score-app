@@ -3,15 +3,12 @@ import 'score_entry.dart';
 import '../../utils/list_utils.dart' as list_utils;
 import '../../utils/map_utils.dart' as map_utils;
 
-
 abstract class StructureScoreEntry extends ScoreEntry {
-
   // ------------------------------------------------------------
   // attributes
   // ------------------------------------------------------------
 
   Map<String, int> followersCount;
-
 
   // ------------------------------------------------------------
   // constructors & factories
@@ -19,16 +16,14 @@ abstract class StructureScoreEntry extends ScoreEntry {
 
   /// [followerCounts] can be a List (e.g. ['Rijk', 'Liza', 'Liza'])
   /// or a Map (e.g. {'Rijk': 1, 'Liza': 2})
-  StructureScoreEntry({dynamic followersCount}) {
+  StructureScoreEntry({dynamic followersCount}) : super() {
     if (followersCount is List<String>) {
       this.followersCount = map_utils.listToCountMap(followersCount);
-    }
-    else {
+    } else {
       this.followersCount = Map<String, int>.from(followersCount ?? {});
     }
   }
 
-  
   // ------------------------------------------------------------
   // getters
   // ------------------------------------------------------------
@@ -36,7 +31,7 @@ abstract class StructureScoreEntry extends ScoreEntry {
   int get structureScore => 0;
 
   List<String> get owners => map_utils.keysOfMaxValues(followersCount);
-  
+
   String get followersToString {
     var returnList = <String>[];
     for (var playerName in followersCount.keys) {
@@ -47,6 +42,6 @@ abstract class StructureScoreEntry extends ScoreEntry {
   }
 
   @override
-  Map<String, int> get scoreMap => Map<String, int>.fromIterables(owners, list_utils.makeList(structureScore, owners.length));
-
+  Map<String, int> get scoreMap =>
+      Map<String, int>.fromIterables(owners, list_utils.makeList(structureScore, owners.length));
 }

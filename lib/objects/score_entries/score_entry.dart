@@ -5,15 +5,22 @@ import 'city_score_entry.dart';
 import 'cloister_score_entry.dart';
 import 'farm_score_entry.dart';
 
+import '../../utils/datetime_utils.dart' as datetime_utils;
 
 abstract class ScoreEntry {
   // ------------------------------------------------------------
   // attributes
   // ------------------------------------------------------------
 
+  DateTime dateCreated;
+
   // ------------------------------------------------------------
   // constructors & factories
   // ------------------------------------------------------------
+
+  ScoreEntry({DateTime dateCreated}) {
+    dateCreated = dateCreated ?? DateTime.now();
+  }
 
   // ------------------------------------------------------------
   // getters
@@ -21,6 +28,7 @@ abstract class ScoreEntry {
 
   Map<String, int> get scoreMap;
   String get properName;
+  String get dateCreatedString => datetime_utils.stringify(dateCreated);
 
   // -------------------------------------------------------------------------------------------------
   // JSON

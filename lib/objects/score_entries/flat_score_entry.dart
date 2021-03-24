@@ -14,7 +14,7 @@ class FlatScoreEntry extends ScoreEntry {
   // constructors & factories
   // ------------------------------------------------------------
 
-  FlatScoreEntry({this.score, this.playerNames}) {
+  FlatScoreEntry({this.score, this.playerNames}) : super() {
     this.playerNames ??= <String>[];
   }
 

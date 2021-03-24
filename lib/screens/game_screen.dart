@@ -11,6 +11,9 @@ import 'package:carcassonne_score_app/widgets/list_views/score_entry_list_view.d
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/list_utils.dart' as list_utils;
+import '../utils/colour_utils.dart' as colour_utils;
+
 class GameScreen extends StatefulWidget {
   @override
   _GameScreenState createState() => _GameScreenState();
@@ -18,82 +21,82 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   int currentPageIndex;
-  String selectedPlayerName;
-  List<Widget> pages;
-  List<List<Widget>> listOfActionLists;
+  List<String> selectedPlayerNames;
 
   @override
   void initState() {
     currentPageIndex = 0;
-    selectedPlayerName = 'All';
+    selectedPlayerNames = [];
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    // putting this here, because in initState() it breaks :)
-    pages = [
-      PlayersListView(),
-      ScoreEntryListView(
-        scoreEntries: Provider.of<Game>(context).scoreEntries,
-      ),
-    ];
-    var game = Provider.of<Game>(context);
-    listOfActionLists = [
-      // first
-      [
-        FlatButton.icon(
-          label: Text("Add points", style: TextStyle(color: Colors.white)),
-          icon: Icon(Icons.add, color: Colors.white),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return ChangeNotifierProvider.value(
-                value: game,
-                child: NewScoreEntryScreen(),
-              );
-            }));
-          },
-        )
-      ],
-      // second
-      [
-        // DropdownButton(
-        //   value: selectedPlayerName,
-        //   style: TextStyle(color: Colors.white),
-        //   items: [
-        //     DropdownMenuItem(
-        //       value: 'All',
-        //       child: Text('All'),
-        //     ),
-        //     ...game.players
-        //         .map(
-        //           (player) => DropdownMenuItem(
-        //             child: Text(player.name),
-        //             value: player.name,
-        //           ),
-        //         )
-        //         .toList(),
-        //   ],
-        //   onChanged: (newVal) {
-        //     print(newVal);
-        //     setState(() {
-        //       selectedPlayerName = newVal;
-        //     });
-        //   },
-        // ),
-      ],
-    ];
-    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     var gamesManager = Provider.of<GamesManager>(context);
     var game = Provider.of<Game>(context);
+    var page = currentPageIndex == 0
+        ? PlayersListView()
+        : Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: list_utils.intersperse(
+                      game.players.map((player) {
+                        return ChoiceChip(
+                          selectedColor: colour_utils.fromText(player.colour),
+                          selected: selectedPlayerNames.contains(player.name),
+                          label: Text(
+                            player.name,
+                            style: TextStyle(
+                              color: selectedPlayerNames.contains(player.name)
+                                  ? colour_utils.highContrastColourTo(player.colour)
+                                  : null,
+                            ),
+                          ),
+                          onSelected: (newValue) {
+                            setState(() {
+                              if (!selectedPlayerNames.remove(player.name)) {
+                                selectedPlayerNames.add(player.name);
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
+                      () => SizedBox(width: 10)),
+                ),
+              ),
+              Expanded(
+                child: ScoreEntryListView(
+                  scoreEntries: game.getScoreEntriesBenefitting(selectedPlayerNames),
+                ),
+              ),
+            ],
+          );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(game.name),
-        actions: listOfActionLists[currentPageIndex],
+        backgroundColor: selectedPlayerNames.length == 1 && currentPageIndex == 1
+            ? colour_utils
+                .fromText(game.players.where((player) => player.name == selectedPlayerNames.first).first.colour)
+            : null,
+        actions: [
+          FlatButton.icon(
+            label: Text("Score", style: TextStyle(color: Colors.white)),
+            icon: Icon(Icons.add, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return ChangeNotifierProvider.value(
+                  value: game,
+                  child: NewScoreEntryScreen(),
+                );
+              }));
+            },
+          )
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -107,17 +110,17 @@ class _GameScreenState extends State<GameScreen> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.list_rounded),
-            title: Text("Players"),
+            title: Text("Scoreboard"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.score_rounded),
-            title: Text("Scores"),
+            icon: Icon(Icons.house_rounded),
+            title: Text("Structures"),
           )
         ],
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: pages[currentPageIndex],
+        child: page,
       ),
       // floatingActionButton: FloatingActionButton.extended(
       //   label: Text('Add points'),

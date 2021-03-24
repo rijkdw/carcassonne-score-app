@@ -39,6 +39,12 @@ class Game extends ChangeNotifier {
     playerColours: ['Red', 'Blue'],
     playerNames: ['Liza', 'Rijk'],
   );
+
+  factory Game.empty() => Game(
+    name: '',
+    playerNames: [],
+    playerColours: [],
+  );
   
   // ------------------------------------------------------------
   // methods
@@ -54,12 +60,18 @@ class Game extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<ScoreEntry> getScoreEntriesBenefitting(String playerName) {
+  List<ScoreEntry> getScoreEntriesBenefitting(dynamic nameOrNames) {
     var returnList = <ScoreEntry>[];
     for (var scoreEntry in scoreEntries) {
-      if (scoreEntry.scoreMap.containsKey(playerName)) {
-        if (scoreEntry.scoreMap[playerName] > 0) {
-          returnList.add(scoreEntry);
+      if (nameOrNames is String && scoreEntry.scoreMap.containsKey(nameOrNames) && scoreEntry.scoreMap[nameOrNames] > 0) {
+        returnList.add(scoreEntry);
+      }
+      if (nameOrNames is List) {
+        for (String p in nameOrNames) {
+          if (scoreEntry.scoreMap.containsKey(p) && scoreEntry.scoreMap[p] > 0) {
+            returnList.add(scoreEntry);
+            continue;
+          }
         }
       }
     }

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../utils/list_utils.dart' as list_utils;
 import '../../utils/colour_utils.dart' as colour_utils;
+import '../../utils/datetime_utils.dart' as datetime_utils;
 
 enum ScoreEntryListTileSize { big, small }
 
@@ -25,7 +26,13 @@ class ScoreEntryListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return scoreEntries.isEmpty
         ? Center(
-            child: Text('No points :('),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.house_rounded, size: 100, color: Colors.brown[200]),
+                Text('No structures to show.'),
+              ],
+            ),
           )
         : ListView(
             children: scoreEntries.map((scoreEntry) {
@@ -86,8 +93,10 @@ class _ScoreExplanationListTile extends StatelessWidget {
                   () => SizedBox(width: 2),
                 ),
               ),
-              SizedBox(width: 6),
+              SizedBox(width: 12),
               Text(scoreEntry.properName),
+              SizedBox(width: 6),
+              Text(scoreEntry.dateCreatedString),
             ],
           ),
         ],
