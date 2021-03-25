@@ -118,7 +118,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
               mainAxisSize: MainAxisSize.min,
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 10),
+                SizedBox(height: 15),
                 TextFormField(
                   controller: gameNameTextEditingController,
                   textCapitalization: TextCapitalization.words,

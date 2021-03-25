@@ -71,7 +71,9 @@ class _GameScreenState extends State<GameScreen> {
               ),
               Expanded(
                 child: ScoreEntryListView(
-                  scoreEntries: game.getScoreEntriesBenefitting(selectedPlayerNames),
+                  scoreEntries: selectedPlayerNames.isEmpty
+                      ? game.scoreEntries
+                      : game.getScoreEntriesBenefitting(selectedPlayerNames),
                   textWhenEmpty: selectedPlayerNames.isEmpty
                       ? 'No scored structures to show :(\nTry selecting some players'
                       : 'No scored structures to show :(\nTry adding some scores for the selected players',

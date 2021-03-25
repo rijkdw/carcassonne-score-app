@@ -70,7 +70,7 @@ class Game extends ChangeNotifier {
         for (String p in nameOrNames) {
           if (scoreEntry.scoreMap.containsKey(p) && scoreEntry.scoreMap[p] > 0) {
             returnList.add(scoreEntry);
-            continue;
+            break;
           }
         }
       }
