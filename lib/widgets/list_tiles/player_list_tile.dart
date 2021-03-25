@@ -39,18 +39,18 @@ class PlayerListTile extends StatelessWidget {
           }));
         },
       ),
-      onTap: () {
-        // opens to NewScoreEntryScreen with this player already selected
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return MultiProvider(
-            providers: [
-              ChangeNotifierProvider.value(value: game),
-              Provider.value(value: player),
-            ],
-            child: ScoreExplanationScreen(),
-          );
-        }));
-      },
+      // onTap: () {
+      //   // opens to NewScoreEntryScreen with this player already selected
+      //   Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      //     return MultiProvider(
+      //       providers: [
+      //         ChangeNotifierProvider.value(value: game),
+      //         Provider.value(value: player),
+      //       ],
+      //       child: ScoreExplanationScreen(),
+      //     );
+      //   }));
+      // },
     );
   }
 }

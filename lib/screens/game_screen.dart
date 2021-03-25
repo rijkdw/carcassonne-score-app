@@ -40,8 +40,8 @@ class _GameScreenState extends State<GameScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                child: Wrap(
+                  // mainAxisSize: MainAxisSize.min,
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: list_utils.intersperse(
                       game.players.map((player) {
@@ -71,6 +71,7 @@ class _GameScreenState extends State<GameScreen> {
               Expanded(
                 child: ScoreEntryListView(
                   scoreEntries: game.getScoreEntriesBenefitting(selectedPlayerNames),
+                  textWhenEmpty: selectedPlayerNames.isEmpty ? 'No text to show\nTry selecting some players' : 'No text to show',
                 ),
               ),
             ],

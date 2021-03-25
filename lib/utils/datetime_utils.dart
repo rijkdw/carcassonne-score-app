@@ -7,7 +7,7 @@ String stringify(DateTime dateTime) {
   // Last year June
   // for now, do hh:mm DD/MM
   if (dateTime == null) print("null datetime received");
-  return DateFormat("jj:mm dd:MM").format(dateTime);
+  return DateFormat("hh:mm dd/MM").format(dateTime);
 }
 
 String stringifyYear(DateTime dateTime) {

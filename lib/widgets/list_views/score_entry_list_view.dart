@@ -17,8 +17,10 @@ enum ScoreEntryListTileSize { big, small }
 class ScoreEntryListView extends StatelessWidget {
   List<ScoreEntry> scoreEntries;
   ScoreEntryListTileSize tileSize;
+  String textWhenEmpty;
 
-  ScoreEntryListView({this.scoreEntries, this.tileSize = ScoreEntryListTileSize.big}) {
+  ScoreEntryListView(
+      {this.scoreEntries, this.tileSize = ScoreEntryListTileSize.big, this.textWhenEmpty = 'No structures.'}) {
     this.scoreEntries ??= <ScoreEntry>[];
   }
 
@@ -30,7 +32,10 @@ class ScoreEntryListView extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.house_rounded, size: 100, color: Colors.brown[200]),
-                Text('No structures to show.'),
+                Text(
+                  this.textWhenEmpty,
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
           )
@@ -94,9 +99,7 @@ class _ScoreExplanationListTile extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 12),
-              Text(scoreEntry.properName),
-              SizedBox(width: 6),
-              Text(scoreEntry.dateCreatedString),
+              Text("${scoreEntry.properName}"),
             ],
           ),
         ],

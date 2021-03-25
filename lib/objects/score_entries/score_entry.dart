@@ -19,7 +19,7 @@ abstract class ScoreEntry {
   // ------------------------------------------------------------
 
   ScoreEntry({DateTime dateCreated}) {
-    dateCreated = dateCreated ?? DateTime.now();
+    this.dateCreated = dateCreated ?? DateTime.now();
   }
 
   // ------------------------------------------------------------
