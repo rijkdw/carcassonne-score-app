@@ -7,6 +7,7 @@ import 'package:carcassonne_score_app/objects/score_entries/flat_score_entry.dar
 import 'package:carcassonne_score_app/objects/score_entries/road_score_entry.dart';
 import 'package:carcassonne_score_app/screens/new_game_screen.dart';
 import 'package:carcassonne_score_app/widgets/list_views/games_list_view.dart';
+import 'package:carcassonne_score_app/widgets/my_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -64,6 +65,8 @@ class GamesListScreen extends StatelessWidget {
           )
         ],
       ),
+      drawer: MyDrawer(),
+      drawerEdgeDragWidth: double.infinity,
       body: GamesListView(),
       floatingActionButton: FloatingActionButton.extended(
         label: Text('New Game'),

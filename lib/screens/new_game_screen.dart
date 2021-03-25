@@ -132,13 +132,14 @@ class _NewGameScreenState extends State<NewGameScreen> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        SizedBox(width: 10),
                         CircleAvatar(
                           // if no player yet, dull the CircleAvatar
                           backgroundColor: playerNameTextEditingControllers[index].text.isEmpty
                               ? colour_utils.fromTextDull(colours[index])
                               : colour_utils.fromText(colours[index]),
                         ),
-                        SizedBox(width: 20),
+                        SizedBox(width: 15),
                         Expanded(
                           child: TextFormField(
                             decoration: playerNameFieldDecoration,

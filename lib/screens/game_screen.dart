@@ -8,6 +8,7 @@ import 'package:carcassonne_score_app/screens/score_explanation_screen.dart';
 import 'package:carcassonne_score_app/widgets/list_tiles/player_list_tile.dart';
 import 'package:carcassonne_score_app/widgets/list_views/players_list_view.dart';
 import 'package:carcassonne_score_app/widgets/list_views/score_entry_list_view.dart';
+import 'package:carcassonne_score_app/widgets/my_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -71,7 +72,9 @@ class _GameScreenState extends State<GameScreen> {
               Expanded(
                 child: ScoreEntryListView(
                   scoreEntries: game.getScoreEntriesBenefitting(selectedPlayerNames),
-                  textWhenEmpty: selectedPlayerNames.isEmpty ? 'No text to show\nTry selecting some players' : 'No text to show',
+                  textWhenEmpty: selectedPlayerNames.isEmpty
+                      ? 'No scored structures to show :(\nTry selecting some players'
+                      : 'No scored structures to show :(\nTry adding some scores for the selected players',
                 ),
               ),
             ],
