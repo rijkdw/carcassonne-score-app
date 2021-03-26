@@ -302,13 +302,31 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       ],
     );
 
+    Widget buildDecoratedTextFormField({String hintText: 'HINT TEXT', TextEditingController controller, IconData iconData}) {
+      return Row(
+        children: [
+          Icon(iconData, color: Colors.brown, size: 30),
+          SizedBox(width: 10),
+          Expanded(
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: inputDecoration.copyWith(hintText: hintText),
+              controller: controller,
+            ),
+          ),
+        ],
+      );
+    }
+
     // form for creating a manual score entry
     var manualChildren = <Widget>[
       // enter the score
-      TextFormField(
-        keyboardType: TextInputType.number,
-        decoration: inputDecoration.copyWith(hintText: 'Points'),
+      _MyHeader('Details'),
+      SizedBox(height: 10),
+      buildDecoratedTextFormField(
+        hintText: 'Points',
         controller: manualScoreTextEditingController,
+        iconData: Icons.stars,
       ),
       SizedBox(height: 10),
       // select the players
@@ -451,17 +469,17 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
 
     // form for creating a city
     var cityChildren = <Widget>[
-      _MyHeader('Structure'),
+      _MyHeader('Details'),
       SizedBox(height: 10),
-      TextFormField(
-        keyboardType: TextInputType.number,
-        decoration: inputDecoration.copyWith(hintText: 'Number of city segments'),
+      buildDecoratedTextFormField(
+        hintText: 'Number of city segments',
+        iconData: Icons.circle,
         controller: cityNumSegmentsTextEditingController,
       ),
       SizedBox(height: 10),
-      TextFormField(
-        keyboardType: TextInputType.number,
-        decoration: inputDecoration.copyWith(hintText: 'Number of shields'),
+      buildDecoratedTextFormField(
+        hintText: 'Number of shields',
+        iconData: Icons.security_rounded,
         controller: cityNumShieldsTextEditingController,
       ),
       SizedBox(height: 10),
@@ -477,11 +495,11 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
 
     // form for creating a road
     var roadChildren = <Widget>[
-      _MyHeader('Structure'),
+      _MyHeader('Details'),
       SizedBox(height: 10),
-      TextFormField(
-        keyboardType: TextInputType.number,
-        decoration: inputDecoration.copyWith(hintText: 'Number of road segments'),
+      buildDecoratedTextFormField(
+        hintText: 'Number of road segments',
+        iconData: Icons.circle,
         controller: roadNumSegmentsTextEditingController,
       ),
       SizedBox(height: 10),
@@ -497,12 +515,12 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
 
     // form for creating a cloister
     var cloisterChildren = <Widget>[
-      _MyHeader('Structure'),
+      _MyHeader('Details'),
       SizedBox(height: 10),
-      TextFormField(
-        keyboardType: TextInputType.number,
-        decoration: inputDecoration.copyWith(hintText: 'Number of tiles surrounding'),
-        controller: roadNumSegmentsTextEditingController,
+      buildDecoratedTextFormField(
+        hintText: 'Number of tiles surrounding',
+        iconData: Icons.grid_on_rounded,
+        controller: cloisterNumTilesTextEditingController,
       ),
       SizedBox(height: 10),
       ...followerChildren,
@@ -511,17 +529,17 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
 
     // form for creating a farm
     var farmChildren = <Widget>[
-      _MyHeader('Structures'),
+      _MyHeader('Details'),
       SizedBox(height: 10),
-      TextFormField(
-        keyboardType: TextInputType.number,
-        decoration: inputDecoration.copyWith(hintText: 'Number of cities'),
+      buildDecoratedTextFormField(
+        hintText: 'Number of cities',
+        iconData: Icons.circle,
         controller: farmNumCitiesTextEditingController,
       ),
       SizedBox(height: 10),
-      TextFormField(
-        keyboardType: TextInputType.number,
-        decoration: inputDecoration.copyWith(hintText: 'Number of castles'),
+      buildDecoratedTextFormField(
+        hintText: 'Number of castles',
+        iconData: Icons.circle,
         controller: farmNumCastlesTextEditingController,
       ),
       SizedBox(height: 10),
