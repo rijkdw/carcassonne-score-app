@@ -336,7 +336,7 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
         behavior: NoGlowScrollBehavior(),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
+          child: Wrap(
             children: list_utils.intersperse(
                 game.players.map((player) {
                   return ChoiceChip(
