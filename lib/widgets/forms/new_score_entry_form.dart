@@ -302,7 +302,8 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       ],
     );
 
-    Widget buildDecoratedTextFormField({String hintText: 'HINT TEXT', TextEditingController controller, IconData iconData}) {
+    Widget buildDecoratedTextFormField(
+        {String hintText: 'HINT TEXT', TextEditingController controller, IconData iconData}) {
       return Row(
         children: [
           Icon(iconData, color: Colors.brown, size: 30),
@@ -372,11 +373,15 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(player.name),
+              Text(
+                player.name,
+                style: TextStyle(fontSize: 18),
+              ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   InkWell(
+                    splashColor: Colors.transparent,
                     onTap: () {
                       FocusScope.of(context).unfocus();
                       onMinus();
@@ -384,7 +389,8 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
                     child: Icon(Icons.arrow_left_rounded, size: 30),
                   ),
                   CircleAvatar(
-                    backgroundColor: text == '0' ? colour_utils.fromTextDull(player.colour) : colour_utils.fromText(player.colour),
+                    backgroundColor:
+                        text == '0' ? colour_utils.fromTextDull(player.colour) : colour_utils.fromText(player.colour),
                     child: Text(
                       text,
                       style: TextStyle(
@@ -394,6 +400,7 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
                     ),
                   ),
                   InkWell(
+                    splashColor: Colors.transparent,
                     onTap: () {
                       FocusScope.of(context).unfocus();
                       onPlus();
@@ -452,7 +459,10 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
 
     Widget buildCheckboxRow({String text, bool value, Function(bool) onChanged}) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(text),
+        Text(
+          text,
+          style: TextStyle(fontSize: 18),
+        ),
         Checkbox(
           value: value,
           onChanged: onChanged,
@@ -612,7 +622,7 @@ class _MyHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(fontSize: 18),
+      style: TextStyle(fontSize: 20),
     );
   }
 }

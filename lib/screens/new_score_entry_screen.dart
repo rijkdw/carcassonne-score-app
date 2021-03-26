@@ -25,7 +25,7 @@ class NewScoreEntryScreen extends StatelessWidget {
         title: Text(formMode == _FormMode.create ? 'New Score Entry' : 'Edit Score Entry'),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        margin: EdgeInsets.symmetric(horizontal: 20),
         child: NewScoreEntryForm(
           game: this.game,
           scoreEntry: this.scoreEntry,

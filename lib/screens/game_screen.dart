@@ -75,7 +75,7 @@ class _GameScreenState extends State<GameScreen> {
                       ? game.scoreEntries
                       : game.getScoreEntriesBenefitting(selectedPlayerNames),
                   textWhenEmpty: selectedPlayerNames.isEmpty
-                      ? 'No scored structures to show :(\nTry selecting some players'
+                      ? 'No scored structures to show :(\nTry selecting some players above'
                       : 'No scored structures to show :(\nTry adding some scores for the selected players',
                 ),
               ),
