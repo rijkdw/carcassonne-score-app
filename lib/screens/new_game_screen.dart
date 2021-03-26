@@ -1,3 +1,4 @@
+import 'package:carcassonne_score_app/managers/previous_players_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:carcassonne_score_app/managers/games_manager.dart';
 import 'package:carcassonne_score_app/objects/game.dart';
@@ -31,7 +32,11 @@ class _NewGameScreenState extends State<NewGameScreen> {
   }
 
   bool hasDuplicatePlayerNames() {
-    return list_utils.containsDuplicates(playerNameTextEditingControllers.map((c) => c.text.trim()).toList());
+    var nonEmptyNames = <String>[];
+    playerNameTextEditingControllers.forEach((c) {
+      if (c.text.trim().isNotEmpty) nonEmptyNames.add(c.text.trim());
+    });
+    return list_utils.containsDuplicates(nonEmptyNames);
   }
 
   bool hasGameName() => gameNameTextEditingController.text.isNotEmpty;
@@ -51,6 +56,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
       playerColours: playerColours,
     );
     Provider.of<GamesManager>(context, listen: false).addNewGame(newGame);
+    playerNames.forEach(Provider.of<PreviousPlayersManager>(context, listen: false).addToNames);
     Navigator.of(context).pop();
   }
 

@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import '../../utils/list_utils.dart' as list_utils;
 
-
 class GamesListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -7,6 +7,7 @@ import 'package:carcassonne_score_app/objects/score_entries/farm_score_entry.dar
 import 'package:carcassonne_score_app/objects/score_entries/flat_score_entry.dart';
 import 'package:carcassonne_score_app/objects/score_entries/road_score_entry.dart';
 import 'package:carcassonne_score_app/objects/score_entries/score_entry.dart';
+import 'package:carcassonne_score_app/widgets/no_glow_scroll_behavior.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -312,32 +313,35 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       SizedBox(height: 10),
       // select the players
       _MyHeader('Players'),
-      SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: list_utils.intersperse(
-              game.players.map((player) {
-                return ChoiceChip(
-                  selectedColor: colour_utils.fromText(player.colour),
-                  selected: manualPlayerSelections.contains(player.name),
-                  label: Text(
-                    player.name,
-                    style: TextStyle(
-                      color: manualPlayerSelections.contains(player.name)
-                          ? colour_utils.highContrastColourTo(player.colour)
-                          : null,
+      ScrollConfiguration(
+        behavior: NoGlowScrollBehavior(),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: list_utils.intersperse(
+                game.players.map((player) {
+                  return ChoiceChip(
+                    selectedColor: colour_utils.fromText(player.colour),
+                    selected: manualPlayerSelections.contains(player.name),
+                    label: Text(
+                      player.name,
+                      style: TextStyle(
+                        color: manualPlayerSelections.contains(player.name)
+                            ? colour_utils.highContrastColourTo(player.colour)
+                            : null,
+                      ),
                     ),
-                  ),
-                  onSelected: (newValue) {
-                    setState(() {
-                      if (!manualPlayerSelections.remove(player.name)) {
-                        manualPlayerSelections.add(player.name);
-                      }
-                    });
-                  },
-                );
-              }).toList(),
-              () => SizedBox(width: 10)),
+                    onSelected: (newValue) {
+                      setState(() {
+                        if (!manualPlayerSelections.remove(player.name)) {
+                          manualPlayerSelections.add(player.name);
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+                () => SizedBox(width: 10)),
+          ),
         ),
       )
     ];
@@ -387,13 +391,16 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       );
     }
 
+    var players = game.players;
+    players.sort((a, b) => a.name.compareTo(b.name));
+
     // form for followers
     var followerChildren = <Widget>[
       Divider(),
       SizedBox(height: 10),
       _MyHeader('Followers'),
       SizedBox(height: 10),
-      ...game.players.map((player) {
+      ...players.map((player) {
         return buildPlayerRow(
           player: player,
           text: '${followerCountMap[player.name]}',
@@ -412,7 +419,7 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       SizedBox(height: 10),
       _MyHeader('Castles'),
       SizedBox(height: 10),
-      ...game.players.map((player) {
+      ...players.map((player) {
         return buildPlayerRow(
           player: player,
           text: '${castleCountMap[player.name]}',

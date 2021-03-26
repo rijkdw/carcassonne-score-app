@@ -1,5 +1,8 @@
+import 'package:carcassonne_score_app/managers/previous_players_manager.dart';
+import 'package:carcassonne_score_app/screens/previous_players_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class MyDrawer extends StatelessWidget {
   @override
@@ -31,10 +34,20 @@ class MyDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            // an option
+            // player names screen
             _DrawerItemListTile(
-              onPressed: () {},
-            )
+              text: "Previous players",
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return PreviousPlayersScreen();
+              })),
+            ),
+            // debug button
+            _DrawerItemListTile(
+              text: "DEBUG",
+              onPressed: () {
+                Provider.of<PreviousPlayersManager>(context, listen: false).addDummyNames();
+              },
+            ),
           ],
         ),
       ),
@@ -46,8 +59,8 @@ class _DrawerItemListTile extends StatelessWidget {
   String text;
   IconData iconData;
   VoidCallback onPressed;
-  
-  _DrawerItemListTile({this.text="OPTION", this.iconData=Icons.help, this.onPressed});
+
+  _DrawerItemListTile({this.text = "OPTION", this.iconData = Icons.help, this.onPressed});
 
   @override
   Widget build(BuildContext context) {

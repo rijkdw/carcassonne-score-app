@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:carcassonne_score_app/managers/games_manager.dart';
+import 'package:carcassonne_score_app/managers/previous_players_manager.dart';
 import 'package:carcassonne_score_app/screens/games_list_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => GamesManager())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => GamesManager()),
+        ChangeNotifierProvider(create: (_) => PreviousPlayersManager()),
+      ],
       child: MaterialApp(
           title: 'Carcassonne Score Tracker',
           theme: ThemeData(
