@@ -332,36 +332,30 @@ class _NewScoreEntryFormState extends State<NewScoreEntryForm> {
       SizedBox(height: 10),
       // select the players
       _MyHeader('Players'),
-      ScrollConfiguration(
-        behavior: NoGlowScrollBehavior(),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Wrap(
-            children: list_utils.intersperse(
-                game.players.map((player) {
-                  return ChoiceChip(
-                    selectedColor: colour_utils.fromText(player.colour),
-                    selected: manualPlayerSelections.contains(player.name),
-                    label: Text(
-                      player.name,
-                      style: TextStyle(
-                        color: manualPlayerSelections.contains(player.name)
-                            ? colour_utils.highContrastColourTo(player.colour)
-                            : null,
-                      ),
-                    ),
-                    onSelected: (newValue) {
-                      setState(() {
-                        if (!manualPlayerSelections.remove(player.name)) {
-                          manualPlayerSelections.add(player.name);
-                        }
-                      });
-                    },
-                  );
-                }).toList(),
-                () => SizedBox(width: 10)),
-          ),
-        ),
+      Wrap(
+        children: list_utils.intersperse(
+            game.players.map((player) {
+              return ChoiceChip(
+                selectedColor: colour_utils.fromText(player.colour),
+                selected: manualPlayerSelections.contains(player.name),
+                label: Text(
+                  player.name,
+                  style: TextStyle(
+                    color: manualPlayerSelections.contains(player.name)
+                        ? colour_utils.highContrastColourTo(player.colour)
+                        : null,
+                  ),
+                ),
+                onSelected: (newValue) {
+                  setState(() {
+                    if (!manualPlayerSelections.remove(player.name)) {
+                      manualPlayerSelections.add(player.name);
+                    }
+                  });
+                },
+              );
+            }).toList(),
+            () => SizedBox(width: 10)),
       )
     ];
 
